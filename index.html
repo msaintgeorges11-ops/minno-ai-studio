@@ -1,7 +1,40 @@
-<!DOCTYPE html><html lang="ht"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Minno Al</title><style>*{box-sizing:border-box}body{margin:0;background:#0a0a12;color:#fff;font-family:sans-serif;padding:16px}h1{background:linear-gradient(90deg,#7c3aed,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent}.card{background:#181826;border-radius:18px;padding:16px;margin:14px 0;border:1px solid #2a2a40}select,input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #333;background:#10101a;color:#fff;margin:6px 0}button{width:100%;padding:14px;border:none;border-radius:12px;font-weight:800;margin:6px 0;background:linear-gradient(90deg,#7c3aed,#3b82f6);color:#fff}</style></head><body>
-<h1>🤖 MINNO AL</h1><p>12 AI - com.minoal.studioalmagic</p>
-<div class="card"><h3>💬 Chat - 4 Modèl</h3><select id="chatM"><option>Gemini 2.5 GRATIS</option><option>Meta Llama GRATIS</option><option>ChatGPT 5</option><option>Claude 4</option></select><textarea id="chatI" placeholder="Ekri an kreyòl..."></textarea><button onclick="alert('Mete kle Gemini pou aktive - gade app.js')">Voye</button></div>
-<div class="card"><h3>📸 Foto - 4 Modèl</h3><select><option>Nano Banana 2</option><option>ChatGPT Image</option><option>Seedream 4.5</option><option>Grok Image</option></select><input placeholder="Dekri foto a"><button>Jenere (10 gratis)</button></div>
-<div class="card"><h3>🎬 Video - 4 Modèl</h3><select><option>Omni 1.1 Flash - RAPID</option><option>Pixverse V6</option><option>Veo Lite 4K</option><option>Grok Imagine</option></select><input placeholder="Dekri video a"><button>Jenere (3 gratis) - Gade piblisite pou telechaje</button></div>
-<div class="card"><h3>💰 Plan</h3><button style="background:#2a2a40">GRATIS: 3 Video / 10 Foto / 50 Chat</button><button style="background:linear-gradient(90deg,#f59e0b,#ec4899)">HD 1080p $10/mwa</button><button style="background:linear-gradient(90deg,#f59e0b,#ec4899)">4K $20/mwa ⭐</button></div>
-</body></html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MINNO AI - Studio Français</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:system-ui,sans-serif;background:#0a0a0f;color:#e8e8ef;min-height:100vh}
+header{background:linear-gradient(135deg,#6d28d9,#db2777);padding:18px;text-align:center;position:sticky;top:0;z-index:10}
+nav{display:flex;gap:8px;padding:12px;background:#12121a;overflow-x:auto;position:sticky;top:78px;z-index:9}
+nav button{flex:1;min-width:90px;padding:10px 14px;border-radius:12px;border:1px solid #2a2a3a;background:#1c1c28;color:#fff;font-weight:600;cursor:pointer}
+nav button.active{background:#6d28d9}
+.container{max-width:900px;margin:0 auto;padding:16px}
+.card{background:#15151f;border:1px solid #232334;border-radius:16px;padding:16px;margin-bottom:16px}
+.btn{padding:10px 16px;border-radius:10px;border:0;background:#6d28d9;color:#fff;font-weight:700;cursor:pointer;width:100%}
+.btn-secondary{background:#2a2a3a}
+.input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid #2a2a3a;background:#0f0f15;color:#fff;margin:6px 0 12px}
+.chat-box{height:42vh;overflow-y:auto;background:#0f0f15;border-radius:12px;padding:12px;border:1px solid #232334;margin-bottom:10px}
+.msg{margin:8px 0;padding:10px 12px;border-radius:12px;max-width:85%}
+.user{background:#6d28d9;margin-left:auto}
+.ai{background:#1e1e2e}
+.small{font-size:12px;opacity:.7}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modal.show{display:flex}
+.modal-card{background:#181825;border:1px solid #333;padding:20px;border-radius:16px;width:100%;max-width:500px}
+</style>
+</head>
+<body>
+<header><h1>🤖 MINNO AI</h1><p>12 Modèles IA - Chat, Photo, Vidéo - 100% en Français</p></header>
+<nav>
+<button class="tab active" data-tab="chat">💬 Chat</button>
+<button class="tab" data-tab="foto">📸 Photo</button>
+<button class="tab" data-tab="video">🎬 Vidéo</button>
+<button class="tab" data-tab="plan">💰 Plans</button>
+</nav>
+<div class="container">
+<div id="chat" class="tab-pane">
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center"><h3>💬 Chat</h3><button class="btn
