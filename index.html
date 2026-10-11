@@ -2,39 +2,55 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MINNO AI - Studio Français</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MINNO AI - Studio Francais</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui,sans-serif;background:#0a0a0f;color:#e8e8ef;min-height:100vh}
+body{font-family:system-ui;background:#0a0a0f;color:#e8e8ef;min-height:100vh}
 header{background:linear-gradient(135deg,#6d28d9,#db2777);padding:18px;text-align:center;position:sticky;top:0;z-index:10}
 nav{display:flex;gap:8px;padding:12px;background:#12121a;overflow-x:auto;position:sticky;top:78px;z-index:9}
-nav button{flex:1;min-width:90px;padding:10px 14px;border-radius:12px;border:1px solid #2a2a3a;background:#1c1c28;color:#fff;font-weight:600;cursor:pointer}
+nav button{flex:1;min-width:90px;padding:10px 14px;border-radius:12px;border:1px solid #2a2a3a;background:#1c1c28;color:#fff;font-weight:700;cursor:pointer}
 nav button.active{background:#6d28d9}
 .container{max-width:900px;margin:0 auto;padding:16px}
 .card{background:#15151f;border:1px solid #232334;border-radius:16px;padding:16px;margin-bottom:16px}
 .btn{padding:10px 16px;border-radius:10px;border:0;background:#6d28d9;color:#fff;font-weight:700;cursor:pointer;width:100%}
 .btn-secondary{background:#2a2a3a}
-.input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid #2a2a3a;background:#0f0f15;color:#fff;margin:6px 0 12px}
-.chat-box{height:42vh;overflow-y:auto;background:#0f0f15;border-radius:12px;padding:12px;border:1px solid #232334;margin-bottom:10px}
-.msg{margin:8px 0;padding:10px 12px;border-radius:12px;max-width:85%}
+input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid #2a2a3a;background:#0f0f15;color:#fff}
+.chat-box{height:42vh;overflow-y:auto;background:#0f0f15;border-radius:12px;padding:12px;border:1px solid #232334;margin-bottom:12px;display:flex;flex-direction:column;gap:8px}
+.msg{padding:8px 12px;border-radius:12px;max-width:85%}
 .user{background:#6d28d9;margin-left:auto}
 .ai{background:#1e1e2e}
-.small{font-size:12px;opacity:.7}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:100;padding:16px}
-.modal.show{display:flex}
-.modal-card{background:#181825;border:1px solid #333;padding:20px;border-radius:16px;width:100%;max-width:500px}
+small{font-size:12px;opacity:.7}
+.tab-pane{display:none}.tab-pane.active{display:block}
 </style>
 </head>
 <body>
-<header><h1>🤖 MINNO AI</h1><p>12 Modèles IA - Chat, Photo, Vidéo - 100% en Français</p></header>
+<header><h1>🤖 MINNO AI</h1><p>12 Modeles IA - Chat, Photo, Video - 100% en Francais</p></header>
 <nav>
-<button class="tab active" data-tab="chat">💬 Chat</button>
-<button class="tab" data-tab="foto">📸 Photo</button>
-<button class="tab" data-tab="video">🎬 Vidéo</button>
-<button class="tab" data-tab="plan">💰 Plans</button>
+<button class="active" data-tab="chat">💬 Chat</button>
+<button data-tab="foto">📸 Photo</button>
+<button data-tab="video">🎬 Video</button>
+<button data-tab="plan">⭐ Plans</button>
 </nav>
 <div class="container">
-<div id="chat" class="tab-pane">
-<div class="card">
-<div style="display:flex;justify-content:space-between;align-items:center"><h3>💬 Chat</h3><button class="btn
+<div id="chat" class="tab-pane active">
+<div class="card"><div class="chat-box" id="chatBox"><div class="msg ai">Bonjour! Je suis MINNO. Comment puis-je vous aider aujourd'hui?</div></div><div style="display:flex;gap:8px"><input id="chatInput" placeholder="Ecrivez votre message..."><button class="btn" style="width:auto" onclick="sendChat()">Envoyer</button></div></div>
+</div>
+<div id="foto" class="tab-pane">
+<div class="card"><h3>📸 Generateur Photo IA</h3><br><textarea id="photoPrompt" rows="3" placeholder="Decrivez l'image que vous voulez... ex: un chat astronaute"></textarea><br><br><select id="photoStyle"><option>Realiste</option><option>Anime</option><option>3D</option><option>Cyberpunk</option></select><br><br><button class="btn" onclick="genPhoto()">Generer Photo</button><div id="photoResult" style="margin-top:12px"></div></div>
+</div>
+<div id="video" class="tab-pane">
+<div class="card"><h3>🎬 Generateur Video IA</h3><br><textarea id="videoPrompt" rows="3" placeholder="Decrivez la video..."></textarea><br><br><button class="btn" onclick="genVideo()">Generer Video</button><div id="videoResult" style="margin-top:12px"></div></div>
+</div>
+<div id="plan" class="tab-pane">
+<div class="card"><h3>⭐ Choisissez votre plan</h3><br><div style="display:grid;gap:12px"><div class="card"><h4>Gratuit - $0</h4><small>10 generations / jour</small><br><br><button class="btn btn-secondary">Actuel</button></div><div class="card" style="border-color:#6d28d9"><h4>Pro - $9.99/mois</h4><small>500 generations, HD, Sans pub</small><br><br><button class="btn">Choisir Pro</button></div><div class="card"><h4>Premium - $19.99/mois</h4><small>Illimite + API</small><br><br><button class="btn">Choisir Premium</button></div></div></div>
+</div>
+</div>
+<script>
+document.querySelectorAll('nav button').forEach(b=>{b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active')}});
+function sendChat(){const i=document.getElementById('chatInput'),box=document.getElementById('chatBox');if(!i.value.trim())return;box.innerHTML+=`<div class=msg user>${i.value}</div>`;const v=i.value;i.value='';setTimeout(()=>{box.innerHTML+=`<div class=msg ai>Merci pour: "${v}". Je suis MINNO en francais! (Demo)</div>`;box.scrollTop=box.scrollHeight},600);box.scrollTop=box.scrollHeight}
+function genPhoto(){const r=document.getElementById('photoResult'),p=document.getElementById('photoPrompt').value;if(!p)return alert('Ecrivez une description');r.innerHTML='<small>Generation en cours... 5s</small>';setTimeout(()=>{r.innerHTML=`<div style="height:200px;background:linear-gradient(135deg,#6d28d9,#db2777);border-radius:12px;display:flex;align-items:center;justify-content:center">🖼️ Image: ${p}</div><br><small>Demo - Connectez API pour vrai generation</small>`},2000)}
+function genVideo(){const r=document.getElementById('videoResult'),p=document.getElementById('videoPrompt').value;if(!p)return alert('Ecrivez une description');r.innerHTML='<small>Generation video... 8s</small>';setTimeout(()=>{r.innerHTML=`<div style="height:200px;background:#1e1e2e;border-radius:12px;display:flex;align-items:center;justify-content:center">🎬 Video: ${p}</div><br><small>Demo - Connectez API</small>`},3000)}
+</script>
+</body>
+</html>
