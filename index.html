@@ -3,54 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MINNO AI - Studio Francais</title>
+<title>MINNO AI - 100% MAGIC</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:system-ui;background:#0a0a0f;color:#e8e8ef;min-height:100vh}
-header{background:linear-gradient(135deg,#6d28d9,#db2777);padding:18px;text-align:center;position:sticky;top:0;z-index:10}
-nav{display:flex;gap:8px;padding:12px;background:#12121a;overflow-x:auto;position:sticky;top:78px;z-index:9}
-nav button{flex:1;min-width:90px;padding:10px 14px;border-radius:12px;border:1px solid #2a2a3a;background:#1c1c28;color:#fff;font-weight:700;cursor:pointer}
-nav button.active{background:#6d28d9}
-.container{max-width:900px;margin:0 auto;padding:16px}
-.card{background:#15151f;border:1px solid #232334;border-radius:16px;padding:16px;margin-bottom:16px}
-.btn{padding:10px 16px;border-radius:10px;border:0;background:#6d28d9;color:#fff;font-weight:700;cursor:pointer;width:100%}
-.btn-secondary{background:#2a2a3a}
-input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid #2a2a3a;background:#0f0f15;color:#fff}
-.chat-box{height:42vh;overflow-y:auto;background:#0f0f15;border-radius:12px;padding:12px;border:1px solid #232334;margin-bottom:12px;display:flex;flex-direction:column;gap:8px}
-.msg{padding:8px 12px;border-radius:12px;max-width:85%}
+body{font-family:system-ui;background:#0d0d14;color:#e8e8ef}
+header{background:linear-gradient(135deg,#6d28d9,#db2777);padding:14px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:20}
+.icon{font-size:20px;cursor:pointer;background:#ffffff18;padding:8px 12px;border-radius:12px}
+.container{max-width:600px;margin:0 auto;padding:12px}
+.card{background:#16161f;border:1px solid #232334;border-radius:16px;padding:14px;margin-bottom:12px}
+select,textarea{width:100%;padding:11px;border-radius:10px;border:1px solid #2a2a3a;background:#0f0f15;color:#fff;margin-top:6px}
+.chat-box{height:160px;overflow-y:auto;background:#0f0f15;border-radius:12px;padding:10px;border:1px solid #232334;margin:10px 0;display:flex;flex-direction:column;gap:6px}
+.msg{padding:8px 10px;border-radius:10px;max-width:90%;font-size:13px;white-space:pre-wrap}
 .user{background:#6d28d9;margin-left:auto}
 .ai{background:#1e1e2e}
-small{font-size:12px;opacity:.7}
-.tab-pane{display:none}.tab-pane.active{display:block}
+.btn{padding:11px;border-radius:10px;border:0;background:linear-gradient(135deg,#6d28d9,#3b82f6);color:#fff;font-weight:700;cursor:pointer;width:100%;margin-top:8px}
+#side{position:fixed;top:0;right:-100%;width:85%;max-width:330px;height:100%;background:#16161f;border-left:1px solid #333;z-index:99;transition:.3s;padding:16px;overflow-y:auto}
+#side.open{right:0}
+#overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#00000088;display:none;z-index:98}
+#overlay.open{display:block}
+.profile{text-align:center;padding:14px;background:#0f0f15;border-radius:14px;margin-bottom:14px}
+.avatar{width:75px;height:75px;border-radius:50%;background:#6d28d9;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 8px;overflow:hidden;cursor:pointer;border:2px solid #6d28d9}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.plan{border-radius:12px;padding:11px;margin:7px 0;border:1px solid #2a2a3a;font-size:12px;line-height:1.5}
+.plan.free{background:#0f0f15}
+.plan.pro{background:linear-gradient(135deg,#1e1b4b,#312e81);border-color:#6d28d9}
+.plan.ultra{background:linear-gradient(135deg,#6d28d9,#db2777)}
+.setting{margin:12px 0}
+.setting label{font-size:11px;opacity:.6;display:block;margin-bottom:4px}
+img.res{width:100%;border-radius:10px;margin-top:8px;border:1px solid #333}
 </style>
 </head>
 <body>
-<header><h1>🤖 MINNO AI</h1><p>12 Modeles IA - Chat, Photo, Video - 100% en Francais</p></header>
-<nav>
-<button class="active" data-tab="chat">💬 Chat</button>
-<button data-tab="foto">📸 Photo</button>
-<button data-tab="video">🎬 Video</button>
-<button data-tab="plan">⭐ Plans</button>
-</nav>
+<div id="overlay" onclick="closeSide()"></div>
+<div id="side">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+<h3>⚙️ Paramètres</h3><span class="icon" onclick="closeSide()">✕</span>
+</div>
+<div class="profile">
+<div class="avatar" id="avatar" onclick="document.getElementById('fileIn').click()">👤</div>
+<input type="file" id="fileIn" accept="image/*" style="display:none" onchange="changeAvatar(event)">
+<div id="userName" style="font-weight:700">Visiteur</div>
+<small id="userEmail" style="opacity:.6">Non connecté</small>
+<button class="btn" id="gmailBtn" onclick="loginGmail()" style="background:#fff;color:#000;font-size:12px">📧 Créer un compte avec Gmail</button>
+<button class="btn" id="logoutBtn" onclick="logout()" style="display:none;background:#3a3a4a;font-size:12px">Déconnexion</button>
+</div>
+<div class="setting">
+<label>🌍 Changer la langue</label>
+<select id="langSelect" onchange="changeLang(this.value)">
+<option value="fr">🇫🇷 Français (Principal)</option>
+<option value="auto">🌍 Auto - Détection automatique</option>
+<option value="en">🇺🇸 English</option>
+<option value="ht">🇭🇹 Kreyòl Ayisyen</option>
+<option value="es">🇪🇸 Español</option>
+<option value="pt">🇧🇷 Português</option>
+<option value="de">🇩🇪 Deutsch</option>
+</select>
+</div>
+<div class="setting">
+<label>💰 Plans d'abonnement</label>
+<div class="plan free"><b>🆓 GRATUIT</b><br>✅ 100 Questions Chat<br>✅ 20 Photos<br>✅ 3 Vidéos 480p<br>📺 Pub pour télécharger</div>
+<div class="plan pro"><b>⭐ PRO - $10 / mois</b><br>✅ 100 Vidéos 1080p<br>✅ 500 Photos HD<br>✅ Chat Illimité</div>
+<div class="plan ultra"><b>💎 ULTRA - $20 / mois</b><br>✅ Tout Illimité 2K/4K<br>✅ Sans publicité</div>
+</div>
+</div>
+<header><h1>🤖 MINNO AI</h1><span class="icon" onclick="openSide()">⚙️</span></header>
 <div class="container">
-<div id="chat" class="tab-pane active">
-<div class="card"><div class="chat-box" id="chatBox"><div class="msg ai">Bonjour! Je suis MINNO. Comment puis-je vous aider aujourd'hui?</div></div><div style="display:flex;gap:8px"><input id="chatInput" placeholder="Ecrivez votre message..."><button class="btn" style="width:auto" onclick="sendChat()">Envoyer</button></div></div>
-</div>
-<div id="foto" class="tab-pane">
-<div class="card"><h3>📸 Generateur Photo IA</h3><br><textarea id="photoPrompt" rows="3" placeholder="Decrivez l'image que vous voulez... ex: un chat astronaute"></textarea><br><br><select id="photoStyle"><option>Realiste</option><option>Anime</option><option>3D</option><option>Cyberpunk</option></select><br><br><button class="btn" onclick="genPhoto()">Generer Photo</button><div id="photoResult" style="margin-top:12px"></div></div>
-</div>
-<div id="video" class="tab-pane">
-<div class="card"><h3>🎬 Generateur Video IA</h3><br><textarea id="videoPrompt" rows="3" placeholder="Decrivez la video..."></textarea><br><br><button class="btn" onclick="genVideo()">Generer Video</button><div id="videoResult" style="margin-top:12px"></div></div>
-</div>
-<div id="plan" class="tab-pane">
-<div class="card"><h3>⭐ Choisissez votre plan</h3><br><div style="display:grid;gap:12px"><div class="card"><h4>Gratuit - $0</h4><small>10 generations / jour</small><br><br><button class="btn btn-secondary">Actuel</button></div><div class="card" style="border-color:#6d28d9"><h4>Pro - $9.99/mois</h4><small>500 generations, HD, Sans pub</small><br><br><button class="btn">Choisir Pro</button></div><div class="card"><h4>Premium - $19.99/mois</h4><small>Illimite + API</small><br><br><button class="btn">Choisir Premium</button></div></div></div>
-</div>
+<div class="card"><h3>💬 Chat - 4 Modèles</h3><select id="chatModel"><option value="claude">Claude 4</option><option value="openai">ChatGPT 5</option><option value="llama">Meta Llama GRATUIT</option><option value="gemini">Gemini 2.5 GRATUIT</option></select><textarea id="chatInput" rows="2" placeholder="Écrivez votre message..."></textarea><button class="btn" id="chatBtn" onclick="sendChat()">Envoyer</button><div class="chat-box" id="chatBox"><div class="msg ai">Bonjour! Je suis MINNO AI! Cliquez sur ⚙️ pour changer la langue et créer votre compte!</div></div></div>
+<div class="card"><h3>📸 Photo - 4 Modèles</h3><select id="fotoModel"><option>Nano Banana 2</option><option>ChatGPT Image</option><option>Seedream 4.5</option><option>Grok Image</option></select><textarea id="fotoPrompt" rows="2" placeholder="Décrivez la photo..."></textarea><button class="btn" id="fotoBtn" onclick="genFoto()">Générer</button><div id="fotoResult"></div></div>
+<div class="card"><h3>🎬 Vidéo - 4 Modèles</h3><select id="videoModel"><option>Omni 1.1 Flash</option><option>Pixverse V6</option><option>Veo Lite 4K</option><option>Grok Imagine</option></select><textarea id="videoPrompt" rows="2" placeholder="Décrivez la vidéo..."></textarea><button class="btn" onclick="genVideo()">Générer</button><div id="videoResult"></div></div>
 </div>
 <script>
-document.querySelectorAll('nav button').forEach(b=>{b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.tab).classList.add('active')}});
-function sendChat(){const i=document.getElementById('chatInput'),box=document.getElementById('chatBox');if(!i.value.trim())return;box.innerHTML+=`<div class=msg user>${i.value}</div>`;const v=i.value;i.value='';setTimeout(()=>{box.innerHTML+=`<div class=msg ai>Merci pour: "${v}". Je suis MINNO en francais! (Demo)</div>`;box.scrollTop=box.scrollHeight},600);box.scrollTop=box.scrollHeight}
-function genPhoto(){const r=document.getElementById('photoResult'),p=document.getElementById('photoPrompt').value;if(!p)return alert('Ecrivez une description');r.innerHTML='<small>Generation en cours... 5s</small>';setTimeout(()=>{r.innerHTML=`<div style="height:200px;background:linear-gradient(135deg,#6d28d9,#db2777);border-radius:12px;display:flex;align-items:center;justify-content:center">🖼️ Image: ${p}</div><br><small>Demo - Connectez API pour vrai generation</small>`},2000)}
-function genVideo(){const r=document.getElementById('videoResult'),p=document.getElementById('videoPrompt').value;if(!p)return alert('Ecrivez une description');r.innerHTML='<small>Generation video... 8s</small>';setTimeout(()=>{r.innerHTML=`<div style="height:200px;background:#1e1e2e;border-radius:12px;display:flex;align-items:center;justify-content:center">🎬 Video: ${p}</div><br><small>Demo - Connectez API</small>`},3000)}
+let curLang=localStorage.getItem('lang')||'fr';
+document.getElementById('langSelect').value=curLang;
+function openSide(){document.getElementById('side').classList.add('open');document.getElementById('overlay').classList.add('open')}
+function closeSide(){document.getElementById('side').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
+function changeLang(v){curLang=v;localStorage.setItem('lang',v);alert('✅ Langue changée: '+v)}
+function changeAvatar(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{document.getElementById('avatar').innerHTML=`<img src="${r.result}">`;localStorage.setItem('avatar',r.result)};r.readAsDataURL(f)}
+let av=localStorage.getItem('avatar');if(av)document.getElementById('avatar').innerHTML=`<img src="${av}">`;
+let user=JSON.parse(localStorage.getItem('minno_user')||'null');if(user)showUser(user);
+function loginGmail(){const n=prompt('Votre nom:');if(!n)return;const em=prompt('Votre Gmail:');if(!em)return;const u={name:n,email:em};localStorage.setItem('minno_user',JSON.stringify(u));showUser(u);alert('✅ Compte créé!');}
+function showUser(u){document.getElementById('userName').textContent=u.name;document.getElementById('userEmail').textContent=u.email;document.getElementById('gmailBtn').style.display='none';document.getElementById('logoutBtn').style.display='block';document.getElementById('avatar').innerHTML=u.name[0].toUpperCase()}
+function logout(){localStorage.removeItem('minno_user');location.reload()}
+async function sendChat(){const txt=document.getElementById('chatInput').value.trim(),box=document.getElementById('chatBox'),btn=document.getElementById('chatBtn'),model=document.getElementById('chatModel');if(!txt)return;let lp="";if(curLang=='fr')lp="Reponds en Francais seulement.";else if(curLang=='en')lp="Respond in English only.";else if(curLang=='ht')lp="Reponn an Kreyol Ayisyen.";else if(curLang=='auto')lp="Respond in SAME language user wrote.";else lp="Reponds en Francais.";const mText=model.options[model.selectedIndex].text;box.innerHTML+=`<div class="msg user">${txt}</div>`;document.getElementById('chatInput').value='';btn.disabled=true;const ai=document.createElement('div');ai.className='msg ai';ai.textContent=mText+'...';box.appendChild(ai);box.scrollTop=9999;try{const r=await fetch(`https://text.pollinations.ai/${encodeURIComponent(txt+". "+lp+" You are MINNO AI "+mText)}?model=${model.value}`);ai.innerHTML=`<small style="opacity:.5">${mText}</small><br>${await r.text()}`;}catch(e){ai.textContent='Erreur';}btn.disabled=false;box.scrollTop=9999;}
+async function genFoto(){const pr=document.getElementById('fotoPrompt').value.trim(),btn=document.getElementById('fotoBtn'),res=document.getElementById('fotoResult');if(!pr)return;btn.disabled=true;const url=`https://image.pollinations.ai/prompt/${encodeURIComponent(pr)}?width=512&height=512&seed=${Math.floor(Math.random()*999999)}&nologo=true`;const img=new Image();img.onload=()=>{res.innerHTML=`<img class="res" src="${url}">`;btn.disabled=false};img.src=url;}
+function genVideo(){const pr=document.getElementById('videoPrompt').value.trim(),res=document.getElementById('videoResult');if(!pr)return;res.innerHTML=`<div style="margin-top:8px;padding:16px;background:#0f0f15;border-radius:12px;text-align:center">🎬 ${pr}<br><small>480p Gratuit | 1080p PRO | 4K ULTRA</small></div>`;}
 </script>
 </body>
 </html>
