@@ -1,385 +1,682 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#faf9f5">
 <title>MINNO AI - Studio Magic</title>
-<meta name="description" content="MINNO AI: chat, photo et vidéo avec l'intelligence artificielle.">
+<meta name="description" content="MINNO AI Studio Magic: chat, photo et vidéo avec l'intelligence artificielle.">
 <style>
-:root{--bg:#faf9f5;--card:#fff;--line:#e8e6dc;--ink:#1f1e1d;--mute:#6b6a65;--acc:#c96442;--acc2:#b5553a;--soft:#f0eee6}
+:root{--bg:#faf9f5;--side:#f3f1ea;--card:#fff;--line:#e8e6dc;--ink:#1f1e1d;--mute:#6b6a65;--acc:#c96442;--acc2:#b5553a;--soft:#f0eee6}
+:root[data-theme=dark]{--bg:#262624;--side:#1f1e1d;--card:#30302e;--line:#3d3d3a;--ink:#f0eee6;--mute:#a8a69e;--soft:#30302e}
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;display:flex;flex-direction:column;height:100dvh;overflow:hidden}
-a{color:inherit;text-decoration:none}
-.wrap{max-width:760px;margin:0 auto;padding:0 14px;width:100%}
-header{flex:none;background:var(--bg);border-bottom:1px solid var(--line)}
-.bar{display:flex;align-items:center;justify-content:space-between;height:56px}
-.logo{font-weight:800;font-size:20px;color:var(--acc);letter-spacing:.5px;white-space:nowrap}
-.brand{display:flex;flex-direction:column;line-height:1.1}
-.brand small{font-size:11px;color:var(--mute);letter-spacing:1.5px;text-transform:uppercase;margin-left:34px;margin-top:2px}
-.icon{border:1px solid var(--line);background:#fff;border-radius:10px;padding:7px 11px;cursor:pointer;font-size:16px}
-.btn{display:inline-block;border:0;border-radius:10px;background:var(--acc);color:#fff;padding:11px 18px;font-size:15px;font-weight:600;cursor:pointer}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;overflow:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:var(--acc)}
+.app{display:flex;height:100dvh}
+/* Sidebar */
+.side{width:284px;flex:none;background:var(--side);border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:90}
+.brand{padding:14px 16px 6px;display:flex;flex-direction:column;line-height:1.1}
+.brand b{font-size:20px;color:var(--acc);letter-spacing:.5px;white-space:nowrap}
+.brand small{font-size:10.5px;color:var(--mute);letter-spacing:1.6px;text-transform:uppercase;margin:3px 0 0 30px}
+.side .btn.full{margin:10px 12px 6px}
+.nav{padding:4px 8px}
+.nav button{width:100%;text-align:left;border:0;background:none;padding:9px 10px;border-radius:10px;font-size:14px;display:flex;gap:10px;align-items:center}
+.nav button:hover,.nav button.on{background:var(--soft)}
+.nav button.on{font-weight:700}
+.rec-title{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:1px;padding:10px 18px 4px}
+.convs{flex:1;overflow-y:auto;padding:0 8px}
+.conv{display:flex;align-items:center;border-radius:10px;padding:0 4px 0 10px}
+.conv:hover,.conv.on{background:var(--soft)}
+.conv span{flex:1;padding:8px 0;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+.conv button{border:0;background:none;color:var(--mute);padding:6px 8px;opacity:.0}
+.conv:hover button,.conv.on button{opacity:1}
+.empty-note{font-size:12.5px;color:var(--mute);padding:6px 10px}
+.me{border-top:1px solid var(--line);padding:10px 12px;display:flex;align-items:center;gap:10px}
+.avatar{width:36px;height:36px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:none}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.me .who{flex:1;min-width:0;line-height:1.2}
+.me .who b{display:block;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.me .who small{color:var(--mute);font-size:11.5px}
+.icon{border:1px solid var(--line);background:var(--card);border-radius:10px;padding:7px 11px;font-size:16px}
+/* Main */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{display:none;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line)}
+.topbar b{color:var(--acc);font-size:17px;flex:1}
+.view{display:none;flex:1;min-height:0}
+.view.on{display:flex;flex-direction:column}
+.pad{flex:1;overflow-y:auto;padding:18px 16px 40px}
+.col{max-width:760px;margin:0 auto}
+h2{font-size:21px;margin-bottom:12px}
+.btn{display:inline-block;border:0;border-radius:10px;background:var(--acc);color:#fff;padding:11px 18px;font-size:15px;font-weight:600}
 .btn:hover{background:var(--acc2)}
-.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:7px 12px;font-size:13px}
 .btn:disabled{opacity:.5;cursor:not-allowed}
-main.wrap{flex:1;min-height:0;display:flex;flex-direction:column}
-.tabs{flex:none;display:flex;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}
-.tab{flex:1;padding:10px 2px;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
-.tab.on{background:var(--acc);color:#fff;border-color:var(--acc)}
-.tool{display:none}
-.tool.on{display:block;flex:1;min-height:0;overflow-y:auto;padding:12px 0 24px}
-h2{font-size:20px;margin-bottom:12px}
+/* Chat */
+.msgs{flex:1;overflow-y:auto;padding:18px 16px 8px}
+.msg{max-width:760px;margin:0 auto 18px;font-size:15.5px}
+.msg.user{display:flex;justify-content:flex-end}
+.msg.user .b{background:var(--soft);border-radius:16px;padding:9px 14px;max-width:85%;white-space:pre-wrap;word-wrap:break-word}
+.msg.ai .b{word-wrap:break-word}
+.msg.ai .b p{margin:0 0 10px}.msg.ai .b ul,.msg.ai .b ol{margin:0 0 10px 22px}
+.msg.ai .b h3,.msg.ai .b h4{margin:12px 0 6px}
+.msg.ai .b code{background:var(--soft);padding:1px 5px;border-radius:5px;font-size:.9em}
+.msg.ai .b pre{background:#1f1e1d;color:#f0eee6;border-radius:12px;padding:12px;margin:0 0 10px;overflow-x:auto;position:relative;font-size:13px}
+.msg.ai .b pre code{background:none;padding:0;color:inherit}
+.msg.ai .b pre button{position:absolute;top:6px;right:6px;border:0;background:#ffffff22;color:#fff;border-radius:6px;padding:3px 8px;font-size:11px}
+.msg.err .b{color:#b3261e}
+.acts{display:flex;gap:6px;margin-top:4px}
+.acts button{border:0;background:none;color:var(--mute);font-size:12.5px;padding:3px 6px;border-radius:6px}
+.acts button:hover{background:var(--soft)}
+.dots span{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mute);margin:0 2px;animation:bl 1.2s infinite}
+.dots span:nth-child(2){animation-delay:.2s}.dots span:nth-child(3){animation-delay:.4s}
+@keyframes bl{0%,80%,100%{opacity:.25}40%{opacity:1}}
+.welcome{max-width:760px;margin:8vh auto 0;text-align:center;padding:0 10px}
+.welcome h1{font-size:28px;margin-bottom:6px}
+.welcome p{color:var(--mute);margin-bottom:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chips button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 14px;font-size:13.5px}
+.composer{flex:none;padding:8px 14px calc(12px + env(safe-area-inset-bottom))}
+.cbox{max-width:760px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:20px;padding:10px 10px 8px 14px;box-shadow:0 2px 10px #0000000d}
+.cbox textarea{width:100%;border:0;outline:0;background:none;color:var(--ink);resize:none;font:inherit;font-size:15.5px;max-height:160px;min-height:26px;display:block}
+.crow{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+.crow select{width:auto;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 10px;font-size:13px}
+.send{width:36px;height:36px;border-radius:50%;border:0;background:var(--acc);color:#fff;font-size:17px}
+.send:disabled{opacity:.4}
+.fine{text-align:center;font-size:11.5px;color:var(--mute);margin-top:6px}
+/* Forms */
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
-select,textarea,input[type=url]{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);margin-bottom:10px;font:inherit}
-textarea{min-height:80px;resize:vertical}
+select,textarea.f,input.f{width:100%;padding:11px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);margin-bottom:10px;font:inherit}
+textarea.f{min-height:84px;resize:vertical}
 .opt{margin:6px 0 12px}
 .opt>label{font-size:12px;color:var(--mute);display:block;margin-bottom:5px;font-weight:600}
 .seg{display:flex;flex-wrap:wrap;gap:6px}
-.seg button{padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer;font:inherit;font-size:13px}
+.seg button{padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:13px}
 .seg button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 .seg button.lock{opacity:.55}
+.hint{font-size:12px;color:var(--mute);margin:4px 0 0}
 .ref-row{display:flex;gap:8px;flex-wrap:wrap}
-.ref-row button{padding:9px 14px;border-radius:10px;border:1px dashed var(--acc);background:#fff;color:var(--acc);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+.ref-row button{padding:9px 14px;border-radius:10px;border:1px dashed var(--acc);background:var(--card);color:var(--acc);font-size:13px;font-weight:600}
 .ref-sel{position:relative;display:inline-block;margin:0 0 10px}
 .ref-sel img{width:110px;height:110px;object-fit:cover;border-radius:10px;border:1px solid var(--line);display:block}
-.ref-sel button{position:absolute;top:-8px;right:-8px;width:26px;height:26px;border-radius:50%;border:0;background:var(--ink);color:#fff;cursor:pointer}
-#lib{position:fixed;inset:0;background:#00000066;display:none;z-index:150;align-items:flex-end;justify-content:center}
-#lib.open{display:flex}
-.lib-box{background:#fff;width:100%;max-width:560px;max-height:80dvh;overflow-y:auto;border-radius:18px 18px 0 0;padding:16px}
-.lib-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.lib-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid var(--line);cursor:pointer}
-.hint{font-size:12px;color:var(--mute);margin:-4px 0 10px}
-.res{width:100%;border-radius:12px;margin-top:12px;border:1px solid var(--line)}
-/* Chat: pran tout espas la */
-#chat.tool.on{display:flex;flex-direction:column;overflow:hidden;padding:10px 0}
-#chat h2{display:none}
-#chat .card{flex:1;display:flex;flex-direction:column;min-height:0}
-.chat-box{order:1;flex:1;min-height:0;overflow-y:auto;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;margin:0 0 10px}
-#chatInput{order:2;min-height:56px;max-height:110px}
-#sendBtn{order:3;width:100%}
-.msg{padding:8px 12px;border-radius:12px;margin-bottom:8px;max-width:88%;font-size:14px;white-space:pre-wrap;word-wrap:break-word}
-.msg.user{background:var(--acc);color:#fff;margin-left:auto}
-.msg.ai{background:var(--soft)}
-.msg small{display:block;opacity:.6;font-size:11px;margin-bottom:2px}
-.grid{display:grid;gap:14px}
-@media(min-width:720px){.grid.three{grid-template-columns:repeat(3,1fr)}}
-.plan h3{font-size:18px}
-.plan .price{font-size:30px;font-weight:800;margin:6px 0}
+.ref-sel button{position:absolute;top:-8px;right:-8px;width:26px;height:26px;border-radius:50%;border:0;background:var(--ink);color:var(--bg)}
+.out{display:grid;gap:12px;margin-top:14px}
+.res{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px}
+.res img,.res video{width:100%;border-radius:10px;display:block}
+.res .acts{margin-top:6px}
+.spin{padding:26px;text-align:center;color:var(--mute)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.grid3 img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid var(--line);cursor:pointer}
+.plans{display:grid;gap:14px}
+@media(min-width:900px){.plans{grid-template-columns:repeat(3,1fr)}.col.wide{max-width:960px}}
+.plan h3{font-size:18px}.plan .price{font-size:30px;font-weight:800;margin:6px 0}
 .plan ul{list-style:none;margin:10px 0 14px;font-size:14px}
 .plan li{padding:3px 0}.plan li:before{content:"✓ ";color:var(--acc);font-weight:700}
 .plan.pro{border:2px solid var(--acc)}
 .plan.ultra{background:var(--acc);color:#fff;border-color:var(--acc)}
-.plan.ultra li:before{color:#fff}
-.plan.ultra .btn{background:#fff;color:var(--acc)}
+.plan.ultra li:before{color:#fff}.plan.ultra .btn{background:#fff;color:var(--acc)}
 details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px}
 summary{cursor:pointer;font-weight:600}
 details p{color:var(--mute);margin-top:8px;font-size:14px}
-.note{font-size:12px;color:var(--mute);margin-top:8px}
+.legal h3{margin:16px 0 4px;font-size:16px}.legal p{color:var(--mute);font-size:14px}
+/* Modals */
+.modal{position:fixed;inset:0;background:#00000066;display:none;z-index:150;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.mbox{background:var(--bg);border:1px solid var(--line);border-radius:18px;width:100%;max-width:480px;max-height:86dvh;overflow-y:auto;padding:16px}
+.mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.setting{margin:12px 0}.setting>label{font-size:12px;color:var(--mute);display:block;margin-bottom:5px;font-weight:600}
 #gate{position:fixed;inset:0;background:var(--bg);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
 #gate.show{display:flex}
-.gate-box{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px 22px;max-width:380px;width:100%;text-align:center}
-#overlay{position:fixed;inset:0;background:#00000055;display:none;z-index:98}
-#overlay.open{display:block}
-#side{position:fixed;top:0;right:-100%;width:88%;max-width:340px;height:100dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 90px;background:#fff;border-left:1px solid var(--line);z-index:99;transition:right .25s}
-#side.open{right:0}
-.side-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.profile{text-align:center;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
-.avatar{width:72px;height:72px;border-radius:50%;background:var(--acc);color:#fff;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:30px;overflow:hidden}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.setting{margin:14px 0}
-.setting label{font-size:12px;color:var(--mute);display:block;margin-bottom:5px}
+.gate-box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px 22px;max-width:380px;width:100%;text-align:center}
+.scrim{position:fixed;inset:0;background:#00000055;display:none;z-index:80}
+@media(max-width:820px){
+  .side{position:fixed;left:-300px;top:0;bottom:0;transition:left .22s}
+  .side.open{left:0}.scrim.open{display:block}
+  .topbar{display:flex}
+}
 </style>
 </head>
 <body>
 
-<div id="gate">
-  <div class="gate-box">
-    <div class="logo" style="font-size:26px">🤖 MINNO AI</div>
-    <div style="font-size:12px;color:var(--mute);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">Studio Magic</div>
-    <h2 data-i18n="gate_title"></h2>
-    <p style="color:var(--mute);margin-bottom:18px" data-i18n="gate_text"></p>
-    <div id="gbtn2" style="display:flex;justify-content:center"></div>
+<div id="gate"><div class="gate-box">
+  <div class="brand" style="align-items:center"><b style="font-size:26px">🤖 MINNO AI</b><small style="margin:4px 0 12px">Studio Magic</small></div>
+  <h2 data-i18n="gate_title"></h2>
+  <p style="color:var(--mute);margin-bottom:18px" data-i18n="gate_text"></p>
+  <div id="gbtn2" style="display:flex;justify-content:center"></div>
+</div></div>
+
+<div class="scrim" id="scrim" onclick="closeSide()"></div>
+<div class="app">
+  <aside class="side" id="side">
+    <div class="brand"><b>🤖 MINNO AI</b><small>Studio Magic</small></div>
+    <button class="btn full" onclick="newChat()" data-i18n="new_chat"></button>
+    <nav class="nav">
+      <button data-v="chat" onclick="go('chat')"><span>💬</span><span data-i18n="nav_chat"></span></button>
+      <button data-v="photo" onclick="go('photo')"><span>📸</span><span data-i18n="nav_photo"></span></button>
+      <button data-v="video" onclick="go('video')"><span>🎬</span><span data-i18n="nav_video"></span></button>
+      <button data-v="lib" onclick="go('lib')"><span>🗂️</span><span data-i18n="nav_lib"></span></button>
+      <button data-v="plans" onclick="go('plans')"><span>💎</span><span data-i18n="nav_plans"></span></button>
+      <button data-v="help" onclick="go('help')"><span>❓</span><span data-i18n="nav_help"></span></button>
+    </nav>
+    <div class="rec-title" data-i18n="recent"></div>
+    <div class="convs" id="convList"></div>
+    <div class="me">
+      <div class="avatar" id="avatar">👤</div>
+      <div class="who"><b id="userName"></b><small id="userEmail"></small></div>
+      <button class="icon" onclick="openSettings()" aria-label="Settings">⚙️</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <button class="icon" onclick="openSide()" aria-label="Menu">☰</button>
+      <b>MINNO AI</b>
+      <button class="icon" onclick="newChat()" aria-label="New chat">✏️</button>
+    </div>
+
+    <!-- CHAT -->
+    <section class="view on" id="v-chat">
+      <div class="msgs" id="msgs"></div>
+      <div class="composer">
+        <div class="cbox">
+          <textarea id="input" rows="1" data-i18n-ph="composer_ph"></textarea>
+          <div class="crow">
+            <select id="chatModel"></select>
+            <div style="display:flex;gap:6px">
+              <button class="send" id="stopBtn" style="display:none;background:var(--ink);color:var(--bg)" onclick="stopGen()" aria-label="Stop">■</button>
+              <button class="send" id="sendBtn" onclick="send()" aria-label="Send">↑</button>
+            </div>
+          </div>
+        </div>
+        <div class="fine" data-i18n="fine"></div>
+      </div>
+    </section>
+
+    <!-- PHOTO -->
+    <section class="view" id="v-photo"><div class="pad"><div class="col">
+      <h2 data-i18n="photo_title"></h2>
+      <div class="card">
+        <select id="photoModel"></select>
+        <textarea class="f" id="photoPrompt" data-i18n-ph="photo_ph"></textarea>
+        <div class="opt"><label data-i18n="ref_label"></label><div id="refbox_photo"></div><div class="hint" data-i18n="ref_hint"></div></div>
+        <div class="opt"><label data-i18n="quality"></label><div class="seg" id="seg_photoQ"></div></div>
+        <div class="opt"><label data-i18n="ratio"></label><div class="seg" id="seg_photoR"></div></div>
+        <button class="btn" id="photoBtn" onclick="genPhoto()" data-i18n="generate"></button>
+      </div>
+      <div class="out" id="photoOut"></div>
+    </div></div></section>
+
+    <!-- VIDEO -->
+    <section class="view" id="v-video"><div class="pad"><div class="col">
+      <h2 data-i18n="video_title"></h2>
+      <div class="card">
+        <select id="videoModel"></select>
+        <textarea class="f" id="videoPrompt" data-i18n-ph="video_ph"></textarea>
+        <div class="opt"><label data-i18n="ref_label"></label><div id="refbox_video"></div></div>
+        <div class="opt"><label data-i18n="resolution"></label><div class="seg" id="seg_videoQ"></div></div>
+        <div class="opt"><label data-i18n="duration"></label><div class="seg" id="seg_videoD"></div></div>
+        <button class="btn" id="videoBtn" onclick="genVideo()" data-i18n="generate"></button>
+      </div>
+      <div class="out" id="videoOut"></div>
+    </div></div></section>
+
+    <!-- LIBRARY -->
+    <section class="view" id="v-lib"><div class="pad"><div class="col">
+      <h2 data-i18n="lib_title"></h2>
+      <div class="grid3" id="libGrid"></div>
+    </div></div></section>
+
+    <!-- PLANS -->
+    <section class="view" id="v-plans"><div class="pad"><div class="col wide">
+      <h2 data-i18n="plans_title"></h2>
+      <div class="plans">
+        <div class="card plan"><h3 data-i18n="free"></h3><div class="price">$0</div>
+          <ul><li data-i18n="f_chat"></li><li data-i18n="f_photo"></li><li data-i18n="f_q"></li><li data-i18n="f_video"></li></ul>
+          <button class="btn ghost" onclick="go('chat')" data-i18n="start"></button></div>
+        <div class="card plan pro"><h3>⭐ PRO</h3><div class="price">$10<small style="font-size:14px;font-weight:400" data-i18n="per_month"></small></div>
+          <ul><li data-i18n="p_chat"></li><li data-i18n="p_photo"></li><li data-i18n="p_video"></li></ul>
+          <button class="btn" id="payBtn1" onclick="payClick()" data-i18n="choose"></button><div id="pp_pro"></div></div>
+        <div class="card plan ultra"><h3>💎 ULTRA</h3><div class="price">$20<small style="font-size:14px;font-weight:400" data-i18n="per_month"></small></div>
+          <ul><li data-i18n="u_all"></li><li data-i18n="u_video"></li></ul>
+          <button class="btn" id="payBtn2" onclick="payClick()" data-i18n="choose"></button><div id="pp_ultra"></div></div>
+      </div>
+      <p class="hint" id="payNote" style="margin-top:10px"></p>
+    </div></div></section>
+
+    <!-- HELP -->
+    <section class="view" id="v-help"><div class="pad"><div class="col">
+      <h2 data-i18n="faq_title"></h2>
+      <details><summary data-i18n="q1"></summary><p data-i18n="a1"></p></details>
+      <details><summary data-i18n="q2"></summary><p data-i18n="a2"></p></details>
+      <details><summary data-i18n="q3"></summary><p data-i18n="a3"></p></details>
+      <details><summary data-i18n="q4"></summary><p data-i18n="a4"></p></details>
+      <div class="legal">
+        <h3 data-i18n="terms_t"></h3><p data-i18n="terms_p"></p>
+        <h3 data-i18n="priv_t"></h3><p data-i18n="priv_p"></p>
+        <h3 data-i18n="ai_t"></h3><p data-i18n="ai_p"></p>
+        <p id="contactLine" style="margin-top:12px"></p>
+      </div>
+    </div></div></section>
   </div>
 </div>
-<div id="overlay" onclick="closeSide()"></div>
-<aside id="side" aria-label="Settings">
-  <div class="side-head"><h3 data-i18n="settings"></h3><button class="icon" onclick="closeSide()">✕</button></div>
-  <div class="profile">
-    <div class="avatar" id="avatar">👤</div>
-    <div id="userName" style="font-weight:700"></div>
-    <small id="userEmail" style="color:var(--mute)"></small>
-    <div style="margin-top:10px">
-      <div id="gbtn"></div>
-      <button class="btn" id="loginBtn" onclick="login()" data-i18n="login"></button>
-      <button class="btn ghost" id="logoutBtn" onclick="logout()" style="display:none" data-i18n="logout"></button>
-    </div>
+
+<!-- Settings -->
+<div class="modal" id="settingsModal" onclick="if(event.target===this)closeSettings()"><div class="mbox">
+  <div class="mhead"><h3 data-i18n="settings"></h3><button class="icon" onclick="closeSettings()">✕</button></div>
+  <div class="setting" style="text-align:center">
+    <div id="gbtn" style="display:flex;justify-content:center"></div>
+    <button class="btn" id="loginBtn" onclick="login()" data-i18n="login"></button>
+    <button class="btn ghost" id="logoutBtn" onclick="logout()" style="display:none" data-i18n="logout"></button>
   </div>
-  <div class="setting">
-    <label data-i18n="language"></label>
-    <select id="langSelect" onchange="changeLang(this.value)">
-      <option value="fr">🇫🇷 Français (principal)</option>
-      <option value="ht">🇭🇹 Kreyòl Ayisyen</option>
-      <option value="en">🇺🇸 English</option>
-    </select>
+  <div class="setting"><label data-i18n="language"></label>
+    <select id="langSelect" onchange="setLang(this.value)">
+      <option value="fr">🇫🇷 Français (principal)</option><option value="ht">🇭🇹 Kreyòl Ayisyen</option><option value="en">🇺🇸 English</option><option value="es">🇪🇸 Español</option>
+    </select></div>
+  <div class="setting"><label data-i18n="theme"></label>
+    <select id="themeSelect" onchange="setTheme(this.value)">
+      <option value="auto" data-i18n="theme_auto"></option><option value="light" data-i18n="theme_light"></option><option value="dark" data-i18n="theme_dark"></option>
+    </select></div>
+  <div class="setting"><label data-i18n="instr"></label>
+    <textarea class="f" id="instrBox" maxlength="1000" data-i18n-ph="instr_ph" onchange="saveInstr()"></textarea></div>
+  <div class="setting"><label data-i18n="plan_label"></label><b id="planBox"></b>
+    <div class="hint" id="usageBox"></div></div>
+  <div class="setting"><button class="btn ghost sm" onclick="clearData()" data-i18n="clear"></button></div>
+</div></div>
+
+<!-- Library picker / viewer -->
+<div class="modal" id="pickModal" onclick="if(event.target===this)closePick()"><div class="mbox">
+  <div class="mhead"><h3 data-i18n="lib_title"></h3><button class="icon" onclick="closePick()">✕</button></div>
+  <div class="grid3" id="pickGrid"></div>
+</div></div>
+<div class="modal" id="adModal"><div class="mbox" style="text-align:center">
+  <div class="mhead"><h3 data-i18n="ad_title"></h3><span></span></div>
+  <div id="adSlot" style="min-height:250px;display:flex;align-items:center;justify-content:center;overflow:hidden"></div>
+  <p id="adWait" class="hint" style="margin:10px 0;font-weight:600"></p>
+  <button class="btn" id="adGo" onclick="adDone()" data-i18n="ad_go" disabled></button>
+  <p class="hint" style="margin-top:8px" data-i18n="ad_pro"></p>
+  <button class="btn sm ghost" style="margin-top:6px" onclick="adCancel()">✕</button>
+</div></div>
+<div class="modal" id="viewModal" onclick="if(event.target===this)closeView()"><div class="mbox">
+  <div class="mhead"><span></span><button class="icon" onclick="closeView()">✕</button></div>
+  <img id="viewImg" style="width:100%;border-radius:12px" alt="">
+  <p id="viewPrompt" class="hint" style="margin:8px 0"></p>
+  <div class="acts" style="flex-wrap:wrap">
+    <button class="btn sm" onclick="dlCur()" data-i18n="download"></button>
+    <button class="btn sm ghost" onclick="refFromView()" data-i18n="use_ref"></button>
+    <button class="btn sm ghost" onclick="delCur()" data-i18n="delete"></button>
   </div>
-  <div class="setting">
-    <label data-i18n="plan_label"></label>
-    <div style="font-weight:700" id="planBox"></div>
-    <button class="btn" style="margin-top:8px" onclick="showTab('plans');closeSide()" data-i18n="see_plans"></button>
-  </div>
-  <div class="setting">
-    <label data-i18n="usage"></label>
-    <div class="note" id="usageBox"></div>
-  </div>
-</aside>
-
-<header>
-  <div class="wrap bar">
-    <a href="#chat" class="brand"><span class="logo">🤖 MINNO AI</span><small>Studio Magic</small></a>
-    <button class="icon" onclick="openSide()" aria-label="Settings">⚙️</button>
-  </div>
-</header>
-
-<main class="wrap">
-  <div class="tabs" id="tabs">
-    <button class="tab on" data-tab="chat" onclick="showTab('chat')" data-i18n="nav_chat"></button>
-    <button class="tab" data-tab="photo" onclick="showTab('photo')" data-i18n="nav_photo"></button>
-    <button class="tab" data-tab="video" onclick="showTab('video')" data-i18n="nav_video"></button>
-    <button class="tab" data-tab="plans" onclick="showTab('plans')" data-i18n="nav_plans"></button>
-    <button class="tab" data-tab="faq" onclick="showTab('faq')" data-i18n="nav_faq"></button>
-  </div>
-
-  <section id="chat" class="tool on">
-    <h2 data-i18n="chat_title"></h2>
-    <div class="card">
-      <select id="chatModel">
-        <option value="gemini">Gemini</option>
-        <option value="llama">Meta Llama</option>
-        <option value="openai">ChatGPT</option>
-        <option value="mistral">Mistral</option>
-      </select>
-      <textarea id="chatInput" data-i18n-ph="chat_ph"></textarea>
-      <button class="btn" id="sendBtn" onclick="sendChat()" data-i18n="send"></button>
-      <div class="chat-box" id="chatBox"></div>
-    </div>
-  </section>
-
-  <section id="photo" class="tool">
-    <h2 data-i18n="photo_title"></h2>
-    <div class="card">
-      <select id="photoModel">
-        <option value="nanobanana">Nano Banana</option>
-        <option value="gptimage">ChatGPT Image</option>
-        <option value="seedream">Seedream</option>
-        <option value="flux">Flux</option>
-      </select>
-      <textarea id="photoPrompt" data-i18n-ph="photo_ph"></textarea>
-
-      <div class="opt">
-        <label data-i18n="ref_label"></label>
-        <div class="refbox" id="refbox_photo"></div>
-        <div class="hint" data-i18n="ref_hint"></div>
-      </div>
-      <div class="opt"><label data-i18n="quality"></label><div class="seg" id="seg_photoQ"></div></div>
-      <div class="opt"><label data-i18n="ratio"></label><div class="seg" id="seg_photoR"></div></div>
-
-      <button class="btn" id="photoBtn" onclick="genPhoto()" data-i18n="generate"></button>
-      <div id="photoResult"></div>
-    </div>
-  </section>
-
-  <section id="video" class="tool">
-    <h2 data-i18n="video_title"></h2>
-    <div class="card">
-      <select id="videoModel"></select>
-      <textarea id="videoPrompt" data-i18n-ph="video_ph"></textarea>
-
-      <div class="opt">
-        <label data-i18n="ref_label"></label>
-        <div class="refbox" id="refbox_video"></div>
-      </div>
-      <div class="opt"><label data-i18n="resolution"></label><div class="seg" id="seg_videoQ"></div></div>
-      <div class="opt"><label data-i18n="duration"></label><div class="seg" id="seg_videoD"></div></div>
-
-      <button class="btn" id="videoBtn" onclick="genVideo()" data-i18n="generate"></button>
-      <div id="videoResult"></div>
-    </div>
-  </section>
-
-  <section id="plans" class="tool">
-    <h2 data-i18n="plans_title"></h2>
-    <div class="grid three">
-      <div class="card plan">
-        <h3 data-i18n="free"></h3><div class="price">$0</div>
-        <ul><li data-i18n="f_chat100"></li><li data-i18n="f_photo20"></li><li data-i18n="f_q"></li><li data-i18n="f_video3"></li><li data-i18n="f_ads"></li></ul>
-        <button class="btn ghost" onclick="showTab('chat')" data-i18n="start"></button>
-      </div>
-      <div class="card plan pro">
-        <h3>⭐ PRO</h3><div class="price">$10<small style="font-size:14px;font-weight:400" data-i18n="per_month"></small></div>
-        <ul><li data-i18n="p_video"></li><li data-i18n="p_photo"></li><li data-i18n="p_dur"></li><li data-i18n="p_chat"></li></ul>
-        <button class="btn" onclick="alert(t('soon'))" data-i18n="choose"></button>
-      </div>
-      <div class="card plan ultra">
-        <h3>💎 ULTRA</h3><div class="price">$20<small style="font-size:14px;font-weight:400" data-i18n="per_month"></small></div>
-        <ul><li data-i18n="u_all"></li><li data-i18n="u_dur"></li><li data-i18n="u_noads"></li></ul>
-        <button class="btn" onclick="alert(t('soon'))" data-i18n="choose"></button>
-      </div>
-    </div>
-  </section>
-
-  <section id="faq" class="tool">
-    <h2 data-i18n="faq_title"></h2>
-    <details><summary data-i18n="q1"></summary><p data-i18n="a1"></p></details>
-    <details><summary data-i18n="q2"></summary><p data-i18n="a2"></p></details>
-    <details><summary data-i18n="q3"></summary><p data-i18n="a3"></p></details>
-    <details><summary data-i18n="q4"></summary><p data-i18n="a4"></p></details>
-  </section>
-</main>
-
-<div id="lib" onclick="if(event.target===this)closeLib()">
-  <div class="lib-box">
-    <div class="side-head"><h3 data-i18n="lib_title"></h3><button class="icon" onclick="closeLib()">✕</button></div>
-    <div id="libGrid" class="lib-grid"></div>
-  </div>
-</div>
+</div></div>
 
 <script>
-/* Mete Client ID Google ou la (Google Cloud Console) pou koneksyon Gmail reyèl */
-const GOOGLE_CLIENT_ID = '';
-/* true = les visiteurs doivent se connecter avec Gmail (actif seulement si GOOGLE_CLIENT_ID est rempli) */
-const REQUIRE_LOGIN = true;
-/* Kle API Pollinations gratis (enter.pollinations.ai). Mete yon kle "publishable" (pk_...) la. */
-const POLLINATIONS_KEY = '';
+/* ===== Konfigirasyon ===== */
+const GOOGLE_CLIENT_ID = '';      // Client ID Google (Google Cloud Console)
+const REQUIRE_LOGIN = true;       // aktif sèlman si GOOGLE_CLIENT_ID ranpli
+const AD_CODE = '';               // kole kòd piblisite a ant gèmè yo (HTML/script). Si vid, pa gen piblisite.
+const AD_SECONDS = 30;            // dire piblisite avan telechajman (plan gratis sèlman)
+const PAYPAL_CLIENT_ID = '';      // PayPal Client ID (piblik, sa a ka isit la)
+const PAYPAL_PLAN_PRO = '';       // ID plan Pro a (P-XXXX) kreye sou PayPal
+const PAYPAL_PLAN_ULTRA = '';     // ID plan Ultra a (P-XXXX) kreye sou PayPal
+const CONTACT = '';               // imèl kontak ou (opsyonèl), pa egzanp 'kontak@sit-ou.com'
 
-/* 4 modèl videyo yo. Pou chak modèl:
-   id  = non modèl la nan sèvis la
-   url = (opsyonèl) adrès API pwòp li, si li gen pwòp kle. Itilize {prompt} {duration} {resolution} {image} {key}
-   key = (opsyonèl) kle API modèl sa a
-   Si url vid, sit la itilize Pollinations ak id a. */
-const VIDEO_MODELS=[
-  {label:'Omni 1.1 Flash - RAPID',id:'omni-flash',maxDur:10,url:'',key:''},
-  {label:'Pixverse V6',id:'pixverse',maxDur:15,url:'',key:''},
-  {label:'Veo Lite 4K',id:'veo',maxDur:8,url:'',key:''},
-  {label:'Grok Imagine',id:'grok-video',maxDur:15,url:'',key:''}
-];
-/* Pou voye foto ou chwazi nan galri telefòn ou bay modèl yo: kreye yon kont Cloudinary gratis,
-   epi mete non "cloud" ou ak yon "upload preset" (unsigned) isit la. */
-const CLOUDINARY={cloud:'',preset:''};
-
-const T = {
-  ht:{settings:'⚙️ Paramèt',login:'📧 Konekte ak Gmail',logout:'Dekonekte',language:'🌍 Chanje lang',usage:'📊 Itilizasyon jodi a',
-    visitor:'Vizitè',notconn:'Pa konekte',nav_chat:'Chat',nav_photo:'Foto',nav_video:'Videyo',nav_plans:'Plan',nav_faq:'FAQ',
-    chat_title:'💬 Chat',chat_ph:'Ekri mesaj ou la...',send:'Voye',thinking:'ap reflechi...',
-    photo_title:'📸 Kreye foto',photo_ph:'Dekri foto a...',generate:'Kreye',
-    video_title:'🎬 Videyo',
-    plans_title:'💰 Plan abònman',free:'GRATIS',start:'Kòmanse',choose:'Chwazi',per_month:' / mwa',
-    f_chat100:'100 kesyon chat',f_photo20:'20 foto',f_q:'Foto kalite estanda 512px',f_video3:'3 videyo 480p, 3 segonn',f_ads:'Piblisite pou telechaje',
-    p_video:'100 videyo jiska 1080p',p_photo:'500 foto HD 1024px',p_dur:'Videyo jiska 5 segonn',p_chat:'Chat san limit',
-    u_all:'Tout san limit, foto 2K ak videyo 4K',u_dur:'Videyo jiska 10 segonn',u_noads:'San piblisite',
-    soon:'Peman yo ap disponib byento.',faq_title:'❓ Kesyon yo poze souvan',
-    q1:'Èske MINNO AI gratis?',a1:'Wi, plan gratis la gen chat ak foto limite chak jou, videyo 480p ak 3 segonn. Plan peye yo ba ou plis kalite ak plis tan.',
-    q2:'Ki lang mwen ka itilize?',a2:'Kreyòl Ayisyen, Fransè ak Anglè. Chanje lang lan nan paramèt yo.',
-    q3:'Kijan pou m konekte?',a3:'Klike sou ikòn paramèt la (⚙️) epi chwazi Konekte ak Gmail.',
-    q4:'Kijan pou m mete yon foto referans?',a4:'Kole lyen yon foto (adrès entènèt li) nan jaden "Foto referans" lan. Modèl la ap itilize l kòm gid.',
-    rights:'Tout dwa rezève.',err:'Sèvis la pa disponib kounye a. Eseye ankò nan kèk minit.',
-    video_err:'Modèl videyo sa a pa disponib kounye a. Eseye yon lòt modèl.',video_ph:'Dekri videyo a...',
-    limit:'Ou rive nan limit jodi a. Konekte oswa tann demen.',gsetup:'Koneksyon Gmail la poko aktive sou sit sa a.',
-    gate_title:'Koneksyon obligatwa',gate_text:'Konekte ak kont Gmail ou pou itilize MINNO AI.',
-    chats:'Chat',photos:'Foto',videos:'Videyo',left:'rete',
-    plan_label:'💳 Plan ou',see_plans:'Wè plan yo',plan_free:'Gratis',plan_pro:'Pro',plan_ultra:'Ultra',
-    ref_label:'🖼️ Foto referans (opsyonèl)',ref_ph:'Kole lyen yon foto (https://...)',ref_hint:'Modèl la itilize foto sa a kòm gid. Li mache pi byen ak Nano Banana ak ChatGPT Image.',
-    quality:'✨ Kalite',ratio:'📐 Fòma',resolution:'🎞️ Rezolisyon',duration:'⏱️ Longè videyo',
-    locked:'🔒 Opsyon sa a disponib avèk plan Pro oswa Ultra.',vlimit:'Ou itilize 3 videyo gratis jodi a.'},
-  fr:{settings:'⚙️ Paramètres',login:'📧 Se connecter avec Gmail',logout:'Déconnexion',language:'🌍 Changer la langue',usage:'📊 Utilisation du jour',
-    visitor:'Visiteur',notconn:'Non connecté',nav_chat:'Chat',nav_photo:'Photo',nav_video:'Vidéo',nav_plans:'Plans',nav_faq:'FAQ',
-    chat_title:'💬 Chat',chat_ph:'Écrivez votre message...',send:'Envoyer',thinking:'réfléchit...',
-    photo_title:'📸 Créer une photo',photo_ph:'Décrivez la photo...',generate:'Générer',
-    video_title:'🎬 Vidéo',
-    plans_title:"💰 Plans d'abonnement",free:'GRATUIT',start:'Commencer',choose:'Choisir',per_month:' / mois',
-    f_chat100:'100 questions chat',f_photo20:'20 photos',f_q:'Photos qualité standard 512px',f_video3:'3 vidéos 480p, 3 secondes',f_ads:'Pub pour télécharger',
-    p_video:"100 vidéos jusqu'à 1080p",p_photo:'500 photos HD 1024px',p_dur:"Vidéos jusqu'à 5 secondes",p_chat:'Chat illimité',
-    u_all:'Tout illimité, photos 2K et vidéos 4K',u_dur:"Vidéos jusqu'à 10 secondes",u_noads:'Sans publicité',
-    soon:'Les paiements seront bientôt disponibles.',faq_title:'❓ Questions fréquentes',
-    q1:'MINNO AI est-il gratuit ?',a1:'Oui, le plan gratuit inclut chat et photos limités par jour, des vidéos en 480p de 3 secondes. Les plans payants offrent plus de qualité et de durée.',
-    q2:'Quelles langues puis-je utiliser ?',a2:'Kreyòl Ayisyen, français et anglais. Changez la langue dans les paramètres.',
-    q3:'Comment me connecter ?',a3:"Cliquez sur l'icône des paramètres (⚙️) puis sur Se connecter avec Gmail.",
-    q4:'Comment ajouter une photo de référence ?',a4:'Collez le lien (adresse web) d\'une photo dans le champ « Photo de référence ». Le modèle l\'utilisera comme guide.',
-    rights:'Tous droits réservés.',err:'Service indisponible pour le moment. Réessayez dans quelques minutes.',
-    video_err:"Ce modèle vidéo n'est pas disponible pour le moment. Essayez un autre modèle.",video_ph:'Décrivez la vidéo...',
-    limit:"Vous avez atteint la limite du jour. Connectez-vous ou revenez demain.",gsetup:"La connexion Gmail n'est pas encore activée sur ce site.",
-    gate_title:'Connexion requise',gate_text:'Connectez-vous avec votre compte Gmail pour utiliser MINNO AI.',
-    chats:'Chat',photos:'Photos',videos:'Vidéos',left:'restant',
-    plan_label:'💳 Votre plan',see_plans:'Voir les plans',plan_free:'Gratuit',plan_pro:'Pro',plan_ultra:'Ultra',
-    ref_label:'🖼️ Photo de référence (optionnel)',ref_ph:"Collez le lien d'une photo (https://...)",ref_hint:'Le modèle utilise cette photo comme guide. Fonctionne mieux avec Nano Banana et ChatGPT Image.',
-    quality:'✨ Qualité',ratio:'📐 Format',resolution:'🎞️ Résolution',duration:'⏱️ Durée de la vidéo',
-    locked:'🔒 Cette option est disponible avec le plan Pro ou Ultra.',vlimit:"Vous avez utilisé vos 3 vidéos gratuites aujourd'hui."},
-  en:{settings:'⚙️ Settings',login:'📧 Sign in with Gmail',logout:'Sign out',language:'🌍 Change language',usage:"📊 Today's usage",
-    visitor:'Visitor',notconn:'Not signed in',nav_chat:'Chat',nav_photo:'Photo',nav_video:'Video',nav_plans:'Plans',nav_faq:'FAQ',
-    chat_title:'💬 Chat',chat_ph:'Write your message...',send:'Send',thinking:'thinking...',
-    photo_title:'📸 Create a photo',photo_ph:'Describe the photo...',generate:'Generate',
-    video_title:'🎬 Video',
-    plans_title:'💰 Subscription plans',free:'FREE',start:'Start',choose:'Choose',per_month:' / month',
-    f_chat100:'100 chat questions',f_photo20:'20 photos',f_q:'Standard quality photos 512px',f_video3:'3 videos 480p, 3 seconds',f_ads:'Ad to download',
-    p_video:'100 videos up to 1080p',p_photo:'500 HD photos 1024px',p_dur:'Videos up to 5 seconds',p_chat:'Unlimited chat',
-    u_all:'Everything unlimited, 2K photos and 4K videos',u_dur:'Videos up to 10 seconds',u_noads:'No ads',
-    soon:'Payments will be available soon.',faq_title:'❓ Frequently asked questions',
-    q1:'Is MINNO AI free?',a1:'Yes, the free plan includes limited chat and photos per day, and 480p videos of 3 seconds. Paid plans give more quality and length.',
-    q2:'Which languages can I use?',a2:'Haitian Creole, French and English. Change the language in settings.',
-    q3:'How do I sign in?',a3:'Tap the settings icon (⚙️) then Sign in with Gmail.',
-    q4:'How do I add a reference photo?',a4:'Paste the link (web address) of a photo in the "Reference photo" field. The model will use it as a guide.',
-    rights:'All rights reserved.',err:'Service unavailable right now. Please try again in a few minutes.',
-    video_err:'This video model is not available right now. Try another model.',video_ph:'Describe the video...',
-    limit:'You reached the daily limit. Sign in or come back tomorrow.',gsetup:'Gmail sign-in is not enabled on this site yet.',
-    gate_title:'Sign-in required',gate_text:'Sign in with your Gmail account to use MINNO AI.',
-    chats:'Chat',photos:'Photos',videos:'Videos',left:'left',
-    plan_label:'💳 Your plan',see_plans:'See plans',plan_free:'Free',plan_pro:'Pro',plan_ultra:'Ultra',
-    ref_label:'🖼️ Reference photo (optional)',ref_ph:'Paste a photo link (https://...)',ref_hint:'The model uses this photo as a guide. Works best with Nano Banana and ChatGPT Image.',
-    quality:'✨ Quality',ratio:'📐 Format',resolution:'🎞️ Resolution',duration:'⏱️ Video length',
-    locked:'🔒 This option is available with the Pro or Ultra plan.',vlimit:'You used your 3 free videos today.'}
+const MODELS_UI = {
+  chat:  [['gemini','Gemini'],['grok','Grok']],
+  photo: [['nano-banana-2','Nano Banana 2'],['grok-imagine','Grok Imagine']],
+  video: [['omni-flash','Omni 1.1 Flash',10],['grok-imagine','Grok Imagine',15]]
 };
-Object.assign(T.ht,{f_video3:'3 videyo 480p pa jou',p_dur:'Rezolisyon 720p ak 1080p',u_dur:'Rezolisyon 4K',
-  a1:'Wi, plan gratis la gen chat ak foto limite chak jou, ak videyo 480p. Plan peye yo ba ou plis kalite.',
-  a4:'Nan seksyon "Foto referans", pran yon foto nan galri telefòn ou, oswa chwazi youn nan bibliyotèk foto ou te deja kreye yo.',
-  ref_hint:'Modèl la itilize foto sa a kòm gid. Li mache pi byen ak Nano Banana ak ChatGPT Image.',
-  ref_gal:'📁 Galri telefòn',ref_lib:'🖼️ Bibliyotèk mwen',lib_title:'Foto ou te kreye yo',lib_empty:'Ou poko gen foto. Kreye youn nan onglè Foto a.',
-  up_cfg:'Pou voye foto telefòn ou bay modèl la, mèt sit la dwe konfigire Cloudinary (gratis). Pou kounye a, chwazi yon foto nan bibliyotèk la.'});
-Object.assign(T.fr,{f_video3:'3 vidéos 480p par jour',p_dur:'Résolutions 720p et 1080p',u_dur:'Résolution 4K',
-  a1:'Oui, le plan gratuit inclut chat et photos limités par jour, et des vidéos en 480p. Les plans payants offrent plus de qualité.',
-  a4:'Dans « Photo de référence », choisissez une photo de la galerie de votre téléphone, ou une photo de votre bibliothèque (déjà créées).',
-  ref_hint:'Le modèle utilise cette photo comme guide. Fonctionne mieux avec Nano Banana et ChatGPT Image.',
-  ref_gal:'📁 Galerie du téléphone',ref_lib:'🖼️ Ma bibliothèque',lib_title:'Vos photos créées',lib_empty:"Vous n'avez pas encore de photos. Créez-en dans l'onglet Photo.",
-  up_cfg:"Pour envoyer une photo de votre téléphone au modèle, le propriétaire du site doit configurer Cloudinary (gratuit). Pour l'instant, choisissez une photo de la bibliothèque."});
-Object.assign(T.en,{f_video3:'3 videos 480p per day',p_dur:'720p and 1080p resolutions',u_dur:'4K resolution',
-  a1:'Yes, the free plan includes limited chat and photos per day, and 480p videos. Paid plans give more quality.',
-  a4:'In "Reference photo", pick a photo from your phone gallery, or one from your library of photos you already created.',
-  ref_hint:'The model uses this photo as a guide. Works best with Nano Banana and ChatGPT Image.',
-  ref_gal:'📁 Phone gallery',ref_lib:'🖼️ My library',lib_title:'Your created photos',lib_empty:"You have no photos yet. Create one in the Photo tab.",
-  up_cfg:'To send a phone photo to the model, the site owner must set up Cloudinary (free). For now, pick a photo from the library.'});
-let lang=(function(){try{return localStorage.getItem('lang_v2')||'fr'}catch(e){return 'fr'}})();
-function t(k){return (T[lang]&&T[lang][k])||T.fr[k]||k}
-function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
-
-/* Plan: 0 = gratis, 1 = pro, 2 = ultra (pou kounye a tout moun gratis) */
-const PLAN_NAMES=['plan_free','plan_pro','plan_ultra'];
-let plan=parseInt(store('plan_level')||'0',10)||0;
-
-/* Opsyon yo, ak plan minimòm pou chak */
-const CFG={
-  photoQ:[{v:'std',l:'Standard 512px',min:0},{v:'hd',l:'HD 1024px',min:1},{v:'2k',l:'2K 2048px',min:2}],
+const CFG = {
+  photoQ:[{v:'std',l:'Standard',min:0},{v:'hd',l:'HD',min:1},{v:'2k',l:'2K',min:2}],
   photoR:[{v:'1:1',l:'1:1',min:0},{v:'16:9',l:'16:9',min:0},{v:'9:16',l:'9:16',min:0},{v:'4:3',l:'4:3',min:0}],
-  videoQ:[{v:'480',l:'480p',min:0},{v:'720',l:'720p',min:1},{v:'1080',l:'1080p',min:1},{v:'2160',l:'4K',min:2}],
-  videoD:[{v:'3',l:'3 s',min:0},{v:'5',l:'5 s',min:1},{v:'10',l:'10 s',min:2}]
+  videoQ:[{v:'480',l:'480p',min:0},{v:'720',l:'720p',min:1},{v:'1080',l:'1080p',min:1},{v:'2160',l:'4K',min:2}]
 };
-const SEL={photoQ:'std',photoR:'1:1',videoQ:'480',videoD:'3'};
-/* Longè videyo a depann de modèl la (Omni 10 s, Veo 8 s, Pixverse 15 s, Grok 15 s). Pa gen kadna pou peye. */
-function curVideoMax(){const s=document.getElementById('videoModel');return (VIDEO_MODELS[parseInt(s.value,10)||0]||VIDEO_MODELS[0]).maxDur}
-function durList(){return [3,5,8,10,15].filter(d=>d<=curVideoMax()).map(d=>({v:String(d),l:d+' s',min:0}))}
-function fixDur(){const max=curVideoMax();if(+SEL.videoD>max){const l=durList();SEL.videoD=l[l.length-1].v}}
+const LIMITS = {chat:100,photo:20,video:3};
+
+/* ===== Tradiksyon ===== */
+const T = {
+fr:{new_chat:'＋ Nouvelle conversation',nav_chat:'Chat',nav_photo:'Photo',nav_video:'Vidéo',nav_lib:'Bibliothèque',nav_plans:'Plans',nav_help:'Aide',
+ recent:'Récents',no_recent:'Aucune conversation',settings:'Paramètres',login:'📧 Se connecter avec Gmail',logout:'Déconnexion',visitor:'Visiteur',notconn:'Non connecté',
+ language:'Langue',theme:'Thème',theme_auto:'Automatique',theme_light:'Clair',theme_dark:'Sombre',instr:'Instructions personnalisées',instr_ph:"Ex: réponds toujours de façon courte.",
+ clear:'Effacer mes données (conversations, photos)',clear_ok:'Toutes les données locales ont été effacées.',clear_q:'Effacer toutes vos conversations et photos sur cet appareil ?',
+ plan_label:'Votre plan',plan0:'Gratuit',plan1:'Pro',plan2:'Ultra',usage:'Aujourd’hui',left:'restant',
+ welcome_title:'Bonjour, comment puis-je aider ?',welcome_sub:'Posez une question dans votre langue, je réponds dans la même langue.',
+ s1:'Explique-moi une idée simple',s2:'Aide-moi à écrire un message',s3:'Donne-moi des idées de business',composer_ph:'Écrivez votre message...',
+ fine:"MINNO AI peut faire des erreurs. Vérifiez les informations importantes.",copy:'Copier',copied:'Copié',regen:'Régénérer',
+ photo_title:'📸 Créer une photo',photo_ph:'Décrivez la photo...',generate:'Générer',quality:'Qualité',ratio:'Format',
+ ref_label:'Photo de référence (optionnel)',ref_gal:'📁 Galerie du téléphone',ref_lib:'🖼️ Ma bibliothèque',ref_hint:"Le modèle utilise cette photo comme guide.",
+ lib_title:'Bibliothèque de photos',lib_empty:"Aucune photo pour l'instant. Créez-en dans l'onglet Photo.",download:'Télécharger',use_ref:'Utiliser comme référence',delete:'Supprimer',
+ video_title:'🎬 Créer une vidéo',video_ph:'Décrivez la vidéo...',resolution:'Résolution',duration:'Durée',working:'Création en cours...',
+ plans_title:"Plans d'abonnement",free:'GRATUIT',start:'Commencer',choose:'Choisir',per_month:' / mois',soon:'Les paiements seront bientôt disponibles.',
+ f_chat:'100 messages par jour',f_photo:'20 photos par jour',f_q:'Qualité standard',f_video:'3 vidéos par jour en 480p',
+ p_chat:'Chat illimité',p_photo:'500 photos HD',p_video:'Vidéos 720p et 1080p',u_all:'Tout illimité, photos 2K',u_video:'Vidéos 4K',
+ faq_title:'Aide et informations',q1:'MINNO AI est-il gratuit ?',a1:'Oui. Le plan gratuit inclut des limites quotidiennes. Les plans payants offrent plus de qualité.',
+ q2:'Quelles langues puis-je utiliser ?',a2:"Kreyòl Ayisyen, français et anglais pour l'interface. Le chat répond dans la langue que vous écrivez.",
+ q3:'Comment ajouter une photo de référence ?',a3:'Dans Photo ou Vidéo, choisissez une photo de la galerie de votre téléphone ou de votre bibliothèque.',
+ q4:'Où sont mes conversations ?',a4:"Elles sont enregistrées sur votre appareil, dans ce navigateur. Si vous effacez les données du navigateur, elles disparaissent.",
+ terms_t:"Conditions d'utilisation",terms_p:"En utilisant MINNO AI, vous acceptez de ne pas créer de contenu illégal, haineux, violent, sexuel impliquant des mineurs, ni de contenu qui usurpe l'identité d'une personne. Nous pouvons limiter l'accès en cas d'abus.",
+ priv_t:'Confidentialité',priv_p:"Vos messages et descriptions sont envoyés aux fournisseurs d'IA pour générer les réponses. Vos conversations et photos sont enregistrées localement sur votre appareil. Si vous vous connectez avec Gmail, nous utilisons seulement votre nom, email et photo de profil.",
+ ai_t:"À propos de l'IA",ai_p:"Les réponses sont générées par intelligence artificielle et peuvent être inexactes. Ne les utilisez pas comme seul avis médical, légal ou financier.",
+ gate_title:'Connexion requise',gate_text:'Connectez-vous avec votre compte Gmail pour utiliser MINNO AI.',
+ err:'Une erreur est survenue. Réessayez dans un instant.',nobackend:"Le serveur de MINNO AI n'est pas encore configuré (dossier api manquant ou clés API absentes).",
+ login_needed:'Veuillez vous connecter pour continuer.',limit:"Vous avez atteint la limite du jour pour le plan gratuit.",locked:'🔒 Cette option est disponible avec le plan Pro ou Ultra.',
+ unavailable:"Ce service n'est pas disponible pour le moment.",gsetup:"La connexion Gmail n'est pas encore activée sur ce site.",contact:'Contact : ',saved:'Enregistrée dans la bibliothèque',ad_title:'Publicité',ad_wait:'Téléchargement disponible dans {n} s',ad_go:'⬇ Télécharger maintenant',ad_pro:'Les plans Pro et Ultra téléchargent sans publicité.',pay_ok:'Abonnement activé ! Merci.',pay_fail:'Le paiement n\'a pas pu être vérifié. Réessayez ou contactez-nous.',pay_login:'Connectez-vous avec Gmail avant de vous abonner.',pay_used:'Cet abonnement est déjà utilisé par un autre compte.',pay_cancel:'Pour annuler : PayPal → Paramètres → Paiements → Gérer les paiements automatiques.'},
+ht:{new_chat:'＋ Nouvo konvèsasyon',nav_chat:'Chat',nav_photo:'Foto',nav_video:'Videyo',nav_lib:'Bibliyotèk',nav_plans:'Plan',nav_help:'Èd',
+ recent:'Resan',no_recent:'Pa gen konvèsasyon',settings:'Paramèt',login:'📧 Konekte ak Gmail',logout:'Dekonekte',visitor:'Vizitè',notconn:'Pa konekte',
+ language:'Lang',theme:'Tèm',theme_auto:'Otomatik',theme_light:'Klè',theme_dark:'Fonse',instr:'Enstriksyon pèsonèl',instr_ph:"Pa egzanp: reponn toujou kout.",
+ clear:'Efase done mwen (konvèsasyon, foto)',clear_ok:'Tout done lokal yo efase.',clear_q:'Efase tout konvèsasyon ak foto ou sou aparèy sa a?',
+ plan_label:'Plan ou',plan0:'Gratis',plan1:'Pro',plan2:'Ultra',usage:'Jodi a',left:'rete',
+ welcome_title:'Bonjou, kijan mwen ka ede w?',welcome_sub:'Poze yon kesyon nan lang ou, m ap reponn nan menm lang lan.',
+ s1:'Eksplike m yon lide senp',s2:'Ede m ekri yon mesaj',s3:'Ban m lide biznis',composer_ph:'Ekri mesaj ou la...',
+ fine:'MINNO AI ka fè erè. Verifye enfòmasyon enpòtan yo.',copy:'Kopye',copied:'Kopye',regen:'Rekòmanse',
+ photo_title:'📸 Kreye foto',photo_ph:'Dekri foto a...',generate:'Kreye',quality:'Kalite',ratio:'Fòma',
+ ref_label:'Foto referans (opsyonèl)',ref_gal:'📁 Galri telefòn',ref_lib:'🖼️ Bibliyotèk mwen',ref_hint:'Modèl la itilize foto sa a kòm gid.',
+ lib_title:'Bibliyotèk foto',lib_empty:'Poko gen foto. Kreye youn nan onglè Foto a.',download:'Telechaje',use_ref:'Itilize kòm referans',delete:'Efase',
+ video_title:'🎬 Kreye videyo',video_ph:'Dekri videyo a...',resolution:'Rezolisyon',duration:'Longè',working:'Ap kreye...',
+ plans_title:'Plan abònman',free:'GRATIS',start:'Kòmanse',choose:'Chwazi',per_month:' / mwa',soon:'Peman yo ap disponib byento.',
+ f_chat:'100 mesaj pa jou',f_photo:'20 foto pa jou',f_q:'Kalite estanda',f_video:'3 videyo pa jou an 480p',
+ p_chat:'Chat san limit',p_photo:'500 foto HD',p_video:'Videyo 720p ak 1080p',u_all:'Tout san limit, foto 2K',u_video:'Videyo 4K',
+ faq_title:'Èd ak enfòmasyon',q1:'Èske MINNO AI gratis?',a1:'Wi. Plan gratis la gen limit chak jou. Plan peye yo ba ou plis kalite.',
+ q2:'Ki lang mwen ka itilize?',a2:'Kreyòl Ayisyen, Fransè ak Anglè pou entèfas la. Chat la reponn nan lang ou ekri a.',
+ q3:'Kijan pou m mete yon foto referans?',a3:'Nan Foto oswa Videyo, chwazi yon foto nan galri telefòn ou oswa nan bibliyotèk ou.',
+ q4:'Kote konvèsasyon m yo ye?',a4:'Yo sove sou aparèy ou, nan navigatè sa a. Si ou efase done navigatè a, yo disparèt.',
+ terms_t:'Kondisyon itilizasyon',terms_p:'Lè w itilize MINNO AI, ou dakò pa kreye kontni ilegal, rayisman, vyolan, seksyèl ki enplike timoun, ni kontni ki fè pase w pou yon lòt moun. Nou ka limite aksè si gen abi.',
+ priv_t:'Konfidansyalite',priv_p:'Mesaj ak deskripsyon ou yo ale bay founisè AI yo pou jenere repons yo. Konvèsasyon ak foto ou yo sove lokalman sou aparèy ou. Si ou konekte ak Gmail, nou sèvi sèlman ak non, imèl ak foto pwofil ou.',
+ ai_t:'Sou AI a',ai_p:'Repons yo fèt pa entelijans atifisyèl epi yo ka pa egzak. Pa itilize yo kòm sèl avi medikal, legal oswa finansye.',
+ gate_title:'Koneksyon obligatwa',gate_text:'Konekte ak kont Gmail ou pou itilize MINNO AI.',
+ err:'Gen yon erè. Eseye ankò nan yon ti moman.',nobackend:'Sèvè MINNO AI a poko konfigire (dosye api a manke oswa kle API yo pa la).',
+ login_needed:'Tanpri konekte pou kontinye.',limit:'Ou rive nan limit jodi a pou plan gratis la.',locked:'🔒 Opsyon sa a disponib avèk plan Pro oswa Ultra.',
+ unavailable:'Sèvis sa a pa disponib kounye a.',gsetup:'Koneksyon Gmail la poko aktive sou sit sa a.',contact:'Kontak: ',saved:'Sove nan bibliyotèk',ad_title:'Piblisite',ad_wait:'Telechajman disponib nan {n} s',ad_go:'⬇ Telechaje kounye a',ad_pro:'Plan Pro ak Ultra telechaje san piblisite.',pay_ok:'Abònman an aktive! Mèsi.',pay_fail:'Nou pa t kapab verifye peman an. Eseye ankò oswa kontakte nou.',pay_login:'Konekte ak Gmail anvan ou abòne.',pay_used:'Abònman sa a deja itilize pa yon lòt kont.',pay_cancel:'Pou anile: PayPal → Paramèt → Peman → Jere peman otomatik.'},
+en:{new_chat:'＋ New chat',nav_chat:'Chat',nav_photo:'Photo',nav_video:'Video',nav_lib:'Library',nav_plans:'Plans',nav_help:'Help',
+ recent:'Recent',no_recent:'No conversations',settings:'Settings',login:'📧 Sign in with Gmail',logout:'Sign out',visitor:'Visitor',notconn:'Not signed in',
+ language:'Language',theme:'Theme',theme_auto:'Automatic',theme_light:'Light',theme_dark:'Dark',instr:'Custom instructions',instr_ph:'E.g. always answer briefly.',
+ clear:'Erase my data (chats, photos)',clear_ok:'All local data erased.',clear_q:'Erase all your chats and photos on this device?',
+ plan_label:'Your plan',plan0:'Free',plan1:'Pro',plan2:'Ultra',usage:'Today',left:'left',
+ welcome_title:'Hello, how can I help?',welcome_sub:'Ask in your language, I reply in the same language.',
+ s1:'Explain a simple idea',s2:'Help me write a message',s3:'Give me business ideas',composer_ph:'Write your message...',
+ fine:'MINNO AI can make mistakes. Check important information.',copy:'Copy',copied:'Copied',regen:'Regenerate',
+ photo_title:'📸 Create a photo',photo_ph:'Describe the photo...',generate:'Generate',quality:'Quality',ratio:'Format',
+ ref_label:'Reference photo (optional)',ref_gal:'📁 Phone gallery',ref_lib:'🖼️ My library',ref_hint:'The model uses this photo as a guide.',
+ lib_title:'Photo library',lib_empty:'No photos yet. Create one in the Photo tab.',download:'Download',use_ref:'Use as reference',delete:'Delete',
+ video_title:'🎬 Create a video',video_ph:'Describe the video...',resolution:'Resolution',duration:'Length',working:'Creating...',
+ plans_title:'Subscription plans',free:'FREE',start:'Start',choose:'Choose',per_month:' / month',soon:'Payments will be available soon.',
+ f_chat:'100 messages per day',f_photo:'20 photos per day',f_q:'Standard quality',f_video:'3 videos per day in 480p',
+ p_chat:'Unlimited chat',p_photo:'500 HD photos',p_video:'720p and 1080p videos',u_all:'Everything unlimited, 2K photos',u_video:'4K videos',
+ faq_title:'Help and information',q1:'Is MINNO AI free?',a1:'Yes. The free plan has daily limits. Paid plans give more quality.',
+ q2:'Which languages can I use?',a2:'Haitian Creole, French and English for the interface. The chat replies in the language you write.',
+ q3:'How do I add a reference photo?',a3:'In Photo or Video, pick a photo from your phone gallery or your library.',
+ q4:'Where are my chats?',a4:'They are saved on your device, in this browser. If you clear browser data, they disappear.',
+ terms_t:'Terms of use',terms_p:'By using MINNO AI you agree not to create illegal, hateful, violent or sexual content involving minors, or content that impersonates a person. We may limit access in case of abuse.',
+ priv_t:'Privacy',priv_p:'Your messages and prompts are sent to AI providers to generate answers. Your chats and photos are stored locally on your device. If you sign in with Gmail, we only use your name, email and profile picture.',
+ ai_t:'About the AI',ai_p:'Answers are generated by artificial intelligence and may be inaccurate. Do not use them as your only medical, legal or financial advice.',
+ gate_title:'Sign-in required',gate_text:'Sign in with your Gmail account to use MINNO AI.',
+ err:'Something went wrong. Please try again in a moment.',nobackend:'The MINNO AI server is not configured yet (missing api folder or API keys).',
+ login_needed:'Please sign in to continue.',limit:'You reached the daily limit for the free plan.',locked:'🔒 This option is available with the Pro or Ultra plan.',
+ unavailable:'This service is not available right now.',gsetup:'Gmail sign-in is not enabled on this site yet.',contact:'Contact: ',saved:'Saved to library',ad_title:'Advertisement',ad_wait:'Download available in {n} s',ad_go:'⬇ Download now',ad_pro:'Pro and Ultra plans download without ads.',pay_ok:'Subscription activated! Thank you.',pay_fail:'We could not verify the payment. Try again or contact us.',pay_login:'Sign in with Gmail before subscribing.',pay_used:'This subscription is already used by another account.',pay_cancel:'To cancel: PayPal → Settings → Payments → Manage automatic payments.'},
+es:{new_chat:'＋ Nueva conversación',nav_chat:'Chat',nav_photo:'Foto',nav_video:'Vídeo',nav_lib:'Biblioteca',nav_plans:'Planes',nav_help:'Ayuda',
+ recent:'Recientes',no_recent:'Sin conversaciones',settings:'Ajustes',login:'📧 Iniciar sesión con Gmail',logout:'Cerrar sesión',visitor:'Visitante',notconn:'Sin sesión',
+ language:'Idioma',theme:'Tema',theme_auto:'Automático',theme_light:'Claro',theme_dark:'Oscuro',instr:'Instrucciones personalizadas',instr_ph:'Ej.: responde siempre de forma breve.',
+ clear:'Borrar mis datos (chats, fotos)',clear_ok:'Todos los datos locales fueron borrados.',clear_q:'¿Borrar todos tus chats y fotos en este dispositivo?',
+ plan_label:'Tu plan',plan0:'Gratis',plan1:'Pro',plan2:'Ultra',usage:'Hoy',left:'restantes',
+ welcome_title:'Hola, ¿en qué puedo ayudarte?',welcome_sub:'Escribe en tu idioma, respondo en el mismo idioma.',
+ s1:'Explícame una idea sencilla',s2:'Ayúdame a escribir un mensaje',s3:'Dame ideas de negocio',composer_ph:'Escribe tu mensaje...',
+ fine:'MINNO AI puede cometer errores. Verifica la información importante.',copy:'Copiar',copied:'Copiado',regen:'Regenerar',
+ photo_title:'📸 Crear una foto',photo_ph:'Describe la foto...',generate:'Generar',quality:'Calidad',ratio:'Formato',
+ ref_label:'Foto de referencia (opcional)',ref_gal:'📁 Galería del teléfono',ref_lib:'🖼️ Mi biblioteca',ref_hint:'El modelo usa esta foto como guía.',
+ lib_title:'Biblioteca de fotos',lib_empty:'Aún no hay fotos. Crea una en la pestaña Foto.',download:'Descargar',use_ref:'Usar como referencia',delete:'Eliminar',
+ video_title:'🎬 Crear un vídeo',video_ph:'Describe el vídeo...',resolution:'Resolución',duration:'Duración',working:'Creando...',
+ plans_title:'Planes de suscripción',free:'GRATIS',start:'Empezar',choose:'Elegir',per_month:' / mes',soon:'Los pagos estarán disponibles pronto.',
+ f_chat:'100 mensajes por día',f_photo:'20 fotos por día',f_q:'Calidad estándar',f_video:'3 vídeos por día en 480p',
+ p_chat:'Chat ilimitado',p_photo:'500 fotos HD',p_video:'Vídeos en 720p y 1080p',u_all:'Todo ilimitado, fotos 2K',u_video:'Vídeos en 4K',
+ faq_title:'Ayuda e información',q1:'¿MINNO AI es gratis?',a1:'Sí. El plan gratuito tiene límites diarios. Los planes de pago ofrecen más calidad.',
+ q2:'¿Qué idiomas puedo usar?',a2:'Francés, criollo haitiano, inglés y español para la interfaz. El chat responde en el idioma en que escribes.',
+ q3:'¿Cómo añado una foto de referencia?',a3:'En Foto o Vídeo, elige una foto de la galería del teléfono o de tu biblioteca.',
+ q4:'¿Dónde están mis chats?',a4:'Se guardan en tu dispositivo, en este navegador. Si borras los datos del navegador, desaparecen.',
+ terms_t:'Condiciones de uso',terms_p:'Al usar MINNO AI aceptas no crear contenido ilegal, de odio, violento o sexual con menores, ni contenido que suplante a una persona. Podemos limitar el acceso en caso de abuso.',
+ priv_t:'Privacidad',priv_p:'Tus mensajes y prompts se envían a proveedores de IA para generar respuestas. Tus chats y fotos se guardan localmente en tu dispositivo. Si inicias sesión con Gmail, solo usamos tu nombre, correo y foto de perfil.',
+ ai_t:'Sobre la IA',ai_p:'Las respuestas las genera una inteligencia artificial y pueden ser inexactas. No las uses como único consejo médico, legal o financiero.',
+ gate_title:'Inicio de sesión necesario',gate_text:'Inicia sesión con tu cuenta de Gmail para usar MINNO AI.',
+ err:'Algo salió mal. Inténtalo de nuevo en un momento.',nobackend:'El servidor de MINNO AI aún no está configurado (falta la carpeta api o las claves API).',
+ login_needed:'Inicia sesión para continuar.',limit:'Alcanzaste el límite diario del plan gratuito.',locked:'🔒 Esta opción está disponible con el plan Pro o Ultra.',
+ unavailable:'Este servicio no está disponible ahora.',gsetup:'El inicio de sesión con Gmail aún no está activado en este sitio.',contact:'Contacto: ',saved:'Guardado en la biblioteca',ad_title:'Publicidad',ad_wait:'Descarga disponible en {n} s',ad_go:'⬇ Descargar ahora',ad_pro:'Los planes Pro y Ultra descargan sin publicidad.',pay_ok:'¡Suscripción activada! Gracias.',pay_fail:'No pudimos verificar el pago. Inténtalo de nuevo o contáctanos.',pay_login:'Inicia sesión con Gmail antes de suscribirte.',pay_used:'Esta suscripción ya la usa otra cuenta.',pay_cancel:'Para cancelar: PayPal → Ajustes → Pagos → Administrar pagos automáticos.'}
+};
+
+/* ===== Éta ak depo lokal ===== */
+const LS={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){return false}}};
+const $=id=>document.getElementById(id);
+function detectLang(){try{const l=((navigator.languages&&navigator.languages[0])||navigator.language||'fr').toLowerCase().slice(0,2);return ['fr','ht','en','es'].includes(l)?l:'fr'}catch(e){return 'fr'}}
+let SET=Object.assign({lang:detectLang(),theme:'auto',instr:'',chatModel:'gemini'},LS.get('mn_set',{}));
+if(!T[SET.lang])SET.lang='fr';
+let convs=LS.get('mn_convs',[]);
+let curId=LS.get('mn_cur',null);
+let gallery=LS.get('mn_gallery',[]);
+let plan=0;
+let ME={enforced:false,limits:null,usage:{chat:0,photo:0,video:0}};
+let user=LS.get('mn_user',null);
+let token=null;try{token=sessionStorage.getItem('mn_token')}catch(e){}
+let busy=false,ctrl=null,view='chat';
+const REF={photo:'',video:''};
+const SEL={photoQ:'std',photoR:'1:1',videoQ:'480',videoD:'5'};
+
+function t(k){return (T[SET.lang]&&T[SET.lang][k])||T.fr[k]||k}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function saveSet(){LS.set('mn_set',SET)}
+function saveConvs(){
+  convs=convs.slice(0,50);
+  if(!LS.set('mn_convs',convs)){convs=convs.slice(0,20);LS.set('mn_convs',convs)}
+  LS.set('mn_cur',curId);
+}
+
+/* ===== Lang ak tèm ===== */
+function applyLang(){
+  document.documentElement.lang=SET.lang;
+  document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
+  document.querySelectorAll('[data-i18n-ph]').forEach(e=>e.placeholder=t(e.dataset.i18nPh));
+  $('langSelect').value=SET.lang;$('themeSelect').value=SET.theme;$('instrBox').value=SET.instr||'';
+  $('planBox').textContent=t('plan'+plan);
+  $('contactLine').innerHTML=CONTACT?esc(t('contact'))+'<a href="mailto:'+esc(CONTACT)+'">'+esc(CONTACT)+'</a>':'';
+  renderUser();renderUsage();renderList();renderChat();renderAllSeg();renderRef('photo');renderRef('video');
+}
+function setLang(v){SET.lang=v;saveSet();applyLang()}
+function applyTheme(){
+  const dark=SET.theme==='dark'||(SET.theme==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+}
+function setTheme(v){SET.theme=v;saveSet();applyTheme()}
+function saveInstr(){SET.instr=$('instrBox').value.slice(0,1000);saveSet()}
+
+/* ===== Navigasyon ===== */
+function openSide(){$('side').classList.add('open');$('scrim').classList.add('open')}
+function closeSide(){$('side').classList.remove('open');$('scrim').classList.remove('open')}
+function go(v){
+  view=v;
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+v));
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  if(v==='lib')renderLib();
+  closeSide();
+}
+function openSettings(){closeSide();$('settingsModal').classList.add('open')}
+function closeSettings(){$('settingsModal').classList.remove('open')}
+function clearData(){
+  if(!confirm(t('clear_q')))return;
+  ['mn_convs','mn_cur','mn_gallery'].forEach(k=>{try{localStorage.removeItem(k)}catch(e){}});
+  convs=[];curId=null;gallery=[];renderList();renderChat();renderLib();alert(t('clear_ok'));
+}
+
+/* ===== Limit chak jou ===== */
+function today(){return new Date().toISOString().slice(0,10)}
+function lim(k){return (ME.limits&&ME.limits[k])||LIMITS[k]}
+function used(k){return ME.enforced?(ME.usage[k]||0):LS.get('mn_u_'+k+'_'+today(),0)}
+function bump(k){if(ME.enforced)ME.usage[k]=(ME.usage[k]||0)+1;else LS.set('mn_u_'+k+'_'+today(),used(k)+1);renderUsage()}
+function allowed(k){if(!ME.enforced&&plan>0)return true;return used(k)<lim(k)}
+async function loadMe(){
+  if(!token&&GOOGLE_CLIENT_ID){plan=0;ME={enforced:false,limits:null,usage:{chat:0,photo:0,video:0}};return}
+  try{const j=await api('/api/me');ME={enforced:!!j.enforced,limits:j.limits||null,usage:j.usage||{chat:0,photo:0,video:0}};plan=j.plan|0}
+  catch(e){if(e.status===401)return;plan=0}
+  renderUsage();renderAllSeg();renderPay();
+}
+function renderUsage(){
+  const f=k=>Math.max(0,lim(k)-used(k));
+  $('usageBox').textContent=t('usage')+': 💬 '+f('chat')+' · 📸 '+f('photo')+' · 🎬 '+f('video')+' ('+t('left')+')';
+}
+
+/* ===== Itilizatè / Google ===== */
+function renderUser(){
+  $('userName').textContent=user?user.name:t('visitor');
+  $('userEmail').textContent=user?user.email:t('notconn');
+  $('loginBtn').style.display=user?'none':'inline-block';
+  $('logoutBtn').style.display=user?'inline-block':'none';
+  $('gate').classList.toggle('show',REQUIRE_LOGIN&&!!GOOGLE_CLIENT_ID&&!user);
+  const av=$('avatar');av.innerHTML='';
+  if(user&&user.picture){const i=document.createElement('img');i.src=user.picture;av.appendChild(i)}else av.textContent='👤';
+}
+function onCred(resp){
+  try{
+    const p=JSON.parse(decodeURIComponent(escape(atob(resp.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))));
+    user={name:p.name,email:p.email,picture:p.picture};token=resp.credential;
+    LS.set('mn_user',user);try{sessionStorage.setItem('mn_token',token)}catch(e){}
+    renderUser();loadMe();
+  }catch(e){alert(t('err'))}
+}
+function login(){if(!GOOGLE_CLIENT_ID||!window.google){alert(t('gsetup'));return}google.accounts.id.prompt()}
+function logout(){try{localStorage.removeItem('mn_user');sessionStorage.removeItem('mn_token')}catch(e){}user=null;token=null;plan=0;ME={enforced:false,limits:null,usage:{chat:0,photo:0,video:0}};renderUser();renderUsage();renderAllSeg();renderPay()}
+function initGoogle(){
+  if(!GOOGLE_CLIENT_ID)return;
+  const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;
+  s.onload=()=>{google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:onCred});
+    google.accounts.id.renderButton($('gbtn'),{theme:'outline',size:'large'});
+    google.accounts.id.renderButton($('gbtn2'),{theme:'outline',size:'large'});
+    $('loginBtn').style.display='none'};
+  document.head.appendChild(s);
+}
+
+/* ===== API (sèvè nou) ===== */
+async function api(path,body,signal){
+  const headers={'Content-Type':'application/json'};
+  if(token)headers.Authorization='Bearer '+token;
+  const r=await fetch(path,{method:body?'POST':'GET',headers,body:body?JSON.stringify(body):undefined,signal});
+  let j=null;try{j=await r.json()}catch(e){}
+  if(!r.ok){const e=new Error((j&&j.error)||('HTTP '+r.status));e.status=r.status;throw e}
+  return j||{};
+}
+function errMsg(e){
+  if(e.status===404)return t('nobackend');
+  if(e.status===401){logout();return t('login_needed')}
+  if(e.status===501)return t('unavailable');
+  if(e.status===429)return t('limit');
+  if(e.status===403)return t('locked');
+  return (e.message&&e.message.length<220&&!/^HTTP/.test(e.message))?e.message:t('err');
+}
+
+/* ===== Markdown senp ===== */
+function md(src){
+  const blocks=[];
+  let s=String(src).replace(/```(\w*)\n?([\s\S]*?)```/g,(m,l,c)=>{blocks.push(c.replace(/\n$/,''));return '\u0001'+(blocks.length-1)+'\u0001'});
+  s=esc(s).replace(/`([^`\n]+)`/g,'<code>$1</code>').replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/(^|[^*])\*([^*\n]+)\*/g,'$1<em>$2</em>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+  let out='',list='',para=[];
+  const flushP=()=>{if(para.length){out+='<p>'+para.join('<br>')+'</p>';para=[]}};
+  const flushL=()=>{if(list){out+='</'+list+'>';list=''}};
+  s.split('\n').forEach(line=>{
+    let m;
+    if((m=line.match(/^\s*[-*]\s+(.*)/))){flushP();if(list!=='ul'){flushL();out+='<ul>';list='ul'}out+='<li>'+m[1]+'</li>'}
+    else if((m=line.match(/^\s*\d+[.)]\s+(.*)/))){flushP();if(list!=='ol'){flushL();out+='<ol>';list='ol'}out+='<li>'+m[1]+'</li>'}
+    else if((m=line.match(/^#{1,4}\s+(.*)/))){flushP();flushL();out+='<h3>'+m[1]+'</h3>'}
+    else if(line.trim()===''){flushP();flushL()}
+    else{flushL();para.push(line)}
+  });
+  flushP();flushL();
+  return out.replace(/\u0001(\d+)\u0001/g,(m,i)=>'<pre><button data-copy="1">'+esc(t('copy'))+'</button><code>'+esc(blocks[+i])+'</code></pre>');
+}
+function copyText(txt,btn){
+  const done=()=>{if(btn){const o=btn.textContent;btn.textContent=t('copied');setTimeout(()=>btn.textContent=o,1200)}};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done,done)}
+  else{const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}a.remove();done()}
+}
+
+/* ===== Chat ===== */
+function cur(){return convs.find(c=>c.id===curId)||null}
+function newChat(){curId=null;saveConvs();go('chat');renderList();renderChat();$('input').focus();closeSide()}
+function selectConv(id){curId=id;saveConvs();go('chat');renderList();renderChat()}
+function delConv(id){convs=convs.filter(c=>c.id!==id);if(curId===id)curId=null;saveConvs();renderList();renderChat()}
+function renderList(){
+  const box=$('convList');box.innerHTML='';
+  if(!convs.length){box.innerHTML='<div class="empty-note">'+esc(t('no_recent'))+'</div>';return}
+  convs.forEach(c=>{
+    const d=document.createElement('div');d.className='conv'+(c.id===curId?' on':'');
+    const sp=document.createElement('span');sp.textContent=c.title||'…';sp.onclick=()=>selectConv(c.id);
+    const b=document.createElement('button');b.textContent='✕';b.setAttribute('aria-label','Delete');b.onclick=e=>{e.stopPropagation();delConv(c.id)};
+    d.appendChild(sp);d.appendChild(b);box.appendChild(d);
+  });
+}
+function renderChat(){
+  const box=$('msgs');box.innerHTML='';
+  const c=cur();
+  if(!c||!c.messages.length){
+    const w=document.createElement('div');w.className='welcome';
+    w.innerHTML='<h1>'+esc(t('welcome_title'))+'</h1><p>'+esc(t('welcome_sub'))+'</p><div class="chips"></div>';
+    ['s1','s2','s3'].forEach(k=>{const b=document.createElement('button');b.textContent=t(k);b.onclick=()=>{$('input').value=t(k);send()};w.querySelector('.chips').appendChild(b)});
+    box.appendChild(w);return;
+  }
+  c.messages.forEach((m,i)=>{
+    const d=document.createElement('div');
+    if(m.role==='user'){d.className='msg user';d.innerHTML='<div class="b">'+esc(m.content)+'</div>'}
+    else{
+      d.className='msg ai'+(m.error?' err':'');
+      d.innerHTML='<div class="b">'+md(m.content)+'</div>';
+      const a=document.createElement('div');a.className='acts';
+      const cb=document.createElement('button');cb.textContent='⧉ '+t('copy');cb.onclick=()=>copyText(m.content,cb);a.appendChild(cb);
+      if(i===c.messages.length-1){const rb=document.createElement('button');rb.textContent='↻ '+t('regen');rb.onclick=regen;a.appendChild(rb)}
+      d.appendChild(a);
+    }
+    box.appendChild(d);
+  });
+  box.querySelectorAll('pre button[data-copy]').forEach(b=>b.onclick=()=>copyText(b.parentNode.querySelector('code').textContent,b));
+  if(busy){const d=document.createElement('div');d.className='msg ai';d.innerHTML='<div class="b dots"><span></span><span></span><span></span></div>';box.appendChild(d)}
+  box.scrollTop=box.scrollHeight;
+}
+function setBusy(b){busy=b;$('sendBtn').style.display=b?'none':'';$('stopBtn').style.display=b?'':'none'}
+async function send(){
+  const inp=$('input'),txt=inp.value.trim();
+  if(!txt||busy)return;
+  if(!allowed('chat')){alert(t('limit'));return}
+  let c=cur();
+  if(!c){c={id:'c'+Date.now(),title:'',model:$('chatModel').value,messages:[],ts:Date.now()};convs.unshift(c);curId=c.id}
+  c.model=$('chatModel').value;
+  c.messages.push({role:'user',content:txt});
+  if(!c.title)c.title=txt.slice(0,40);
+  inp.value='';autosize();saveConvs();renderList();
+  await generate(c);
+}
+async function generate(c){
+  setBusy(true);renderChat();
+  ctrl=new AbortController();
+  try{
+    const msgs=c.messages.filter(m=>!m.error).slice(-20).map(m=>({role:m.role,content:m.content}));
+    const j=await api('/api/chat',{model:c.model,messages:msgs,lang:SET.lang,instructions:SET.instr},ctrl.signal);
+    c.messages.push({role:'assistant',content:j.text||'…'});bump('chat');
+  }catch(e){
+    if(e.name!=='AbortError')c.messages.push({role:'assistant',content:'⚠️ '+errMsg(e),error:true});
+  }
+  setBusy(false);ctrl=null;saveConvs();renderChat();
+}
+function stopGen(){if(ctrl)ctrl.abort()}
+async function regen(){
+  const c=cur();if(!c||busy)return;
+  while(c.messages.length&&c.messages[c.messages.length-1].role==='assistant')c.messages.pop();
+  if(!c.messages.length)return;
+  await generate(c);
+}
+function autosize(){const i=$('input');i.style.height='auto';i.style.height=Math.min(i.scrollHeight,160)+'px'}
+
+/* ===== Opsyon (kalite, fòma, longè) ===== */
+function curVideo(){const v=$('videoModel').value;return MODELS_UI.video.find(m=>m[0]===v)||MODELS_UI.video[0]}
+function durList(){return [3,5,8,10,15].filter(d=>d<=curVideo()[2]).map(d=>({v:String(d),l:d+' s',min:0}))}
+function fixDur(){if(+SEL.videoD>curVideo()[2]){const l=durList();SEL.videoD=l[l.length-1].v}}
 function renderSeg(key){
-  const box=document.getElementById('seg_'+key);box.innerHTML='';
+  const box=$('seg_'+key);box.innerHTML='';
   (key==='videoD'?durList():CFG[key]).forEach(o=>{
-    const b=document.createElement('button');
-    const locked=o.min>plan;
+    const b=document.createElement('button'),locked=o.min>plan;
     b.textContent=(locked?'🔒 ':'')+o.l;
     if(locked)b.className='lock';
     if(SEL[key]===o.v&&!locked)b.className+=' on';
@@ -387,120 +684,23 @@ function renderSeg(key){
     box.appendChild(b);
   });
 }
-function renderAllSeg(){Object.keys(CFG).forEach(renderSeg)}
+function renderAllSeg(){['photoQ','photoR','videoQ','videoD'].forEach(renderSeg)}
 
-function applyLang(){
-  document.documentElement.lang=lang;
-  document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=t(e.dataset.i18n));
-  document.querySelectorAll('[data-i18n-ph]').forEach(e=>e.placeholder=t(e.dataset.i18nPh));
-  document.getElementById('langSelect').value=lang;
-  document.getElementById('planBox').textContent=t(PLAN_NAMES[plan]);
-  if(typeof renderRef==='function'){renderRef('photo');renderRef('video')}
-  showUser();showUsage();
-}
-function changeLang(v){lang=v;store('lang_v2',v);applyLang()}
-
-function openSide(){document.getElementById('side').classList.add('open');document.getElementById('overlay').classList.add('open')}
-function closeSide(){document.getElementById('side').classList.remove('open');document.getElementById('overlay').classList.remove('open')}
-
-/* Limit chak jou (plan gratis) */
-const LIMITS={chat:100,photo:20,video:3};
-function today(){return new Date().toISOString().slice(0,10)}
-function used(k){return parseInt(store('u_'+k+'_'+today())||'0',10)}
-function bump(k){store('u_'+k+'_'+today(),String(used(k)+1));showUsage()}
-function showUsage(){
-  const f=k=>plan>0&&k!=='video'?'∞':Math.max(0,LIMITS[k]-used(k));
-  document.getElementById('usageBox').textContent=
-    t('chats')+': '+f('chat')+' '+t('left')+' · '+t('photos')+': '+f('photo')+' '+t('left')+' · '+t('videos')+': '+f('video')+' '+t('left');
-}
-
-/* Itilizatè / Google */
-let user=null;
-try{user=JSON.parse(store('minno_user')||'null')}catch(e){}
-function showUser(){
-  const av=document.getElementById('avatar');
-  document.getElementById('userName').textContent=user?user.name:t('visitor');
-  document.getElementById('userEmail').textContent=user?user.email:t('notconn');
-  document.getElementById('loginBtn').style.display=user?'none':'inline-block';
-  document.getElementById('logoutBtn').style.display=user?'inline-block':'none';
-  document.getElementById('gate').classList.toggle('show',REQUIRE_LOGIN&&!!GOOGLE_CLIENT_ID&&!user);
-  av.innerHTML='';
-  if(user&&user.picture){const i=document.createElement('img');i.src=user.picture;av.appendChild(i)}else av.textContent='👤';
-}
-function onCred(resp){
-  try{
-    const p=JSON.parse(decodeURIComponent(escape(atob(resp.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')))));
-    user={name:p.name,email:p.email,picture:p.picture};
-    store('minno_user',JSON.stringify(user));showUser();
-  }catch(e){alert(t('err'))}
-}
-function login(){
-  if(!GOOGLE_CLIENT_ID||!window.google){alert(t('gsetup'));return}
-  google.accounts.id.prompt();
-}
-function logout(){try{localStorage.removeItem('minno_user')}catch(e){}user=null;showUser()}
-function initGoogle(){
-  if(!GOOGLE_CLIENT_ID)return;
-  const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;
-  s.onload=()=>{google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:onCred});
-    google.accounts.id.renderButton(document.getElementById('gbtn'),{theme:'outline',size:'large'});
-    google.accounts.id.renderButton(document.getElementById('gbtn2'),{theme:'outline',size:'large'});
-    document.getElementById('loginBtn').style.display='none'};
-  document.head.appendChild(s);
-}
-
-/* Chat */
-const history=[];
-function addMsg(who,text,label){
-  const box=document.getElementById('chatBox');
-  const d=document.createElement('div');d.className='msg '+who;
-  if(label){const s=document.createElement('small');s.textContent=label;d.appendChild(s)}
-  d.appendChild(document.createTextNode(text));
-  box.appendChild(d);box.scrollTop=box.scrollHeight;return d;
-}
-async function sendChat(){
-  const inp=document.getElementById('chatInput'),txt=inp.value.trim();
-  if(!txt)return;
-  if(plan===0&&used('chat')>=LIMITS.chat){alert(t('limit'));return}
-  const sel=document.getElementById('chatModel'),model=sel.value,label=sel.options[sel.selectedIndex].text;
-  const btn=document.getElementById('sendBtn');
-  addMsg('user',txt);inp.value='';history.push({role:'user',content:txt});
-  const wait=addMsg('ai',t('thinking'),label);btn.disabled=true;
-  try{
-    const sys={role:'system',content:"Reply automatically in the same language the user writes in (Haitian Creole, French, English, Spanish, etc.). Never switch language unless the user does."};
-    const msgs=[sys].concat(history.slice(-12));
-    const tryModels=[model,'openai','mistral','llama'].filter((m,i,a)=>a.indexOf(m)===i);
-    const endpoints=['https://gen.pollinations.ai/v1/chat/completions','https://text.pollinations.ai/openai'];
-    const headers={'Content-Type':'application/json'};
-    if(POLLINATIONS_KEY)headers['Authorization']='Bearer '+POLLINATIONS_KEY;
-    let out='';
-    outer:for(const m of tryModels){
-      for(const ep of endpoints){
-        try{
-          const r=await fetch(ep,{method:'POST',headers:headers,body:JSON.stringify({model:m,messages:msgs})});
-          if(!r.ok)continue;
-          const j=await r.json();
-          const c=j&&j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content;
-          if(c){out=c;break outer}
-        }catch(e){}
-      }
-    }
-    if(!out)throw new Error('empty');
-    wait.lastChild.textContent=out;history.push({role:'assistant',content:out});bump('chat');
-  }catch(e){wait.lastChild.textContent=t('err');history.pop()}
-  btn.disabled=false;
-}
-document.getElementById('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat()}});
-
-/* Foto referans: apèsi */
-const REF={photo:'',video:''};
-function getGallery(){try{return JSON.parse(store('gallery')||'[]')}catch(e){return []}}
-function addToGallery(u){
-  if(!u||u.indexOf('http')!==0)return;
-  const g=getGallery().filter(x=>x!==u);g.unshift(u);store('gallery',JSON.stringify(g.slice(0,24)));
+/* ===== Foto referans ===== */
+function shrink(src,max,q){
+  return new Promise((ok,ko)=>{
+    const im=new Image();
+    im.onload=()=>{
+      const r=Math.min(1,max/Math.max(im.width,im.height)),w=Math.round(im.width*r),h=Math.round(im.height*r);
+      const c=document.createElement('canvas');c.width=w;c.height=h;
+      const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,w,h);x.drawImage(im,0,0,w,h);
+      ok(c.toDataURL('image/jpeg',q));
+    };
+    im.onerror=ko;im.src=src;
+  });
 }
 function renderRef(target){
-  const box=document.getElementById('refbox_'+target);box.innerHTML='';
+  const box=$('refbox_'+target);box.innerHTML='';
   if(REF[target]){
     const w=document.createElement('div');w.className='ref-sel';
     const i=document.createElement('img');i.src=REF[target];
@@ -509,110 +709,148 @@ function renderRef(target){
   }
   const row=document.createElement('div');row.className='ref-row';
   const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.style.display='none';
-  inp.onchange=()=>uploadRef(target,inp.files[0]);
+  inp.onchange=()=>{
+    const f=inp.files[0];if(!f)return;
+    const fr=new FileReader();
+    fr.onload=()=>shrink(fr.result,1024,.85).then(d=>{REF[target]=d;renderRef(target)}).catch(()=>alert(t('err')));
+    fr.readAsDataURL(f);
+  };
   const b1=document.createElement('button');b1.textContent=t('ref_gal');b1.onclick=()=>inp.click();
-  const b2=document.createElement('button');b2.textContent=t('ref_lib');b2.onclick=()=>openLib(target);
+  const b2=document.createElement('button');b2.textContent=t('ref_lib');b2.onclick=()=>openPick(target);
   row.appendChild(inp);row.appendChild(b1);row.appendChild(b2);box.appendChild(row);
 }
-async function uploadRef(target,file){
-  if(!file)return;
-  if(!CLOUDINARY.cloud||!CLOUDINARY.preset){alert(t('up_cfg'));return}
-  try{
-    const fd=new FormData();fd.append('file',file);fd.append('upload_preset',CLOUDINARY.preset);
-    const r=await fetch('https://api.cloudinary.com/v1_1/'+CLOUDINARY.cloud+'/image/upload',{method:'POST',body:fd});
-    const j=await r.json();
-    if(!j.secure_url)throw new Error('upload');
-    REF[target]=j.secure_url;addToGallery(j.secure_url);renderRef(target);
-  }catch(e){alert(t('err'))}
+function openPick(target){
+  const g=$('pickGrid');g.innerHTML='';
+  if(!gallery.length){g.style.display='block';g.textContent=t('lib_empty')}
+  else{g.style.display='grid';gallery.forEach(it=>{const i=document.createElement('img');i.src=it.thumb;i.onclick=()=>{REF[target]=it.thumb;renderRef(target);closePick()};g.appendChild(i)})}
+  $('pickModal').classList.add('open');
 }
-function openLib(target){
-  const g=getGallery(),grid=document.getElementById('libGrid');grid.innerHTML='';
-  if(!g.length){grid.style.display='block';grid.textContent=t('lib_empty')}
-  else{
-    grid.style.display='grid';
-    g.forEach(u=>{const i=document.createElement('img');i.src=u;i.loading='lazy';
-      i.onclick=()=>{REF[target]=u;renderRef(target);closeLib()};grid.appendChild(i)});
-  }
-  document.getElementById('lib').classList.add('open');
-}
-function closeLib(){document.getElementById('lib').classList.remove('open')}
+function closePick(){$('pickModal').classList.remove('open')}
 
-/* Foto */
-function photoSize(){
-  const long={std:512,hd:1024,'2k':2048}[SEL.photoQ]||512;
-  const p=SEL.photoR.split(':'),a=+p[0],b=+p[1];
-  const w=a>=b?long:Math.round(long*a/b),h=a>=b?Math.round(long*b/a):long;
-  return {w:w,h:h};
+/* ===== Bibliyotèk ===== */
+let viewing=null;
+function addGallery(dataUrl,prompt,model){
+  shrink(dataUrl,512,.75).then(th=>{
+    gallery.unshift({id:'g'+Date.now(),thumb:th,prompt:prompt,model:model,ts:Date.now()});
+    gallery=gallery.slice(0,40);
+    while(gallery.length&&!LS.set('mn_gallery',gallery))gallery.pop();
+    if(view==='lib')renderLib();
+  }).catch(()=>{});
 }
-function genPhoto(){
-  const p=document.getElementById('photoPrompt').value.trim();
-  if(!p)return;
-  if(plan===0&&used('photo')>=LIMITS.photo){alert(t('limit'));return}
-  const out=document.getElementById('photoResult'),btn=document.getElementById('photoBtn');
-  out.textContent=t('thinking');btn.disabled=true;
-  let model=document.getElementById('photoModel').value;
-  const ref=REF.photo,sz=photoSize(),seed=Math.floor(Math.random()*1e6);
-  const url=m=>{
-    const q='?model='+m+'&width='+sz.w+'&height='+sz.h+'&seed='+seed+(ref?'&image='+encodeURIComponent(ref):'');
-    return POLLINATIONS_KEY
-      ?'https://gen.pollinations.ai/image/'+encodeURIComponent(p)+q+'&key='+encodeURIComponent(POLLINATIONS_KEY)
-      :'https://image.pollinations.ai/prompt/'+encodeURIComponent(p)+q+'&nologo=true';
+function renderLib(){
+  const g=$('libGrid');g.innerHTML='';
+  if(!gallery.length){g.style.display='block';g.innerHTML='<p class="hint">'+esc(t('lib_empty'))+'</p>';return}
+  g.style.display='grid';
+  gallery.forEach(it=>{const i=document.createElement('img');i.src=it.thumb;i.onclick=()=>{viewing=it;$('viewImg').src=it.thumb;$('viewPrompt').textContent=it.prompt||'';$('viewModal').classList.add('open')};g.appendChild(i)});
+}
+function closeView(){$('viewModal').classList.remove('open')}
+function dlRaw(url,name){const a=document.createElement('a');a.href=url;a.download=name;a.target='_blank';a.rel='noopener';document.body.appendChild(a);a.click();a.remove()}
+function dlData(url,name){withAd(()=>dlRaw(url,name))}
+
+/* ===== Peman PayPal ===== */
+let ppLoaded=false,ppRendered=false;
+function payClick(){
+  if(!PAYPAL_CLIENT_ID||!PAYPAL_PLAN_PRO){alert(t('soon'));return}
+  if(GOOGLE_CLIENT_ID&&!user){alert(t('pay_login'));return}
+  if(!ME.enforced){alert(t('soon'));return}
+}
+function renderPay(){
+  const on=!!(PAYPAL_CLIENT_ID&&PAYPAL_PLAN_PRO&&ME.enforced&&user);
+  $('payBtn1').style.display=on?'none':'';$('payBtn2').style.display=on?'none':'';
+  $('payNote').textContent=on?(plan>0?t('pay_cancel'):''):'';
+  if(!on||plan>0){$('pp_pro').innerHTML='';$('pp_ultra').innerHTML='';ppRendered=false;return}
+  if(ppRendered)return;
+  const draw=()=>{
+    if(!window.paypal)return;ppRendered=true;
+    [['pp_pro',PAYPAL_PLAN_PRO],['pp_ultra',PAYPAL_PLAN_ULTRA]].forEach(([id,pid])=>{
+      if(!pid)return;
+      paypal.Buttons({style:{layout:'vertical',shape:'rect',label:'subscribe'},
+        createSubscription:(d,a)=>a.subscription.create({plan_id:pid}),
+        onApprove:async d=>{try{await api('/api/paypal',{subscriptionID:d.subscriptionID});ppRendered=false;await loadMe();alert(t('pay_ok'))}catch(e){alert(e.status===409?t('pay_used'):t('pay_fail'))}},
+        onError:()=>alert(t('pay_fail'))}).render('#'+id);
+    });
   };
-  const img=new Image();img.className='res';img.alt=p;
-  let retried=false;
-  img.onload=()=>{out.innerHTML='';out.appendChild(img);btn.disabled=false;bump('photo');addToGallery(img.src)};
-  img.onerror=()=>{
-    if(!retried&&model!=='flux'){retried=true;img.src=url('flux');return}
-    out.textContent=t('err');btn.disabled=false;
-  };
-  img.src=url(model);
+  if(window.paypal){draw();return}
+  if(ppLoaded)return;ppLoaded=true;
+  const sc=document.createElement('script');
+  sc.src='https://www.paypal.com/sdk/js?client-id='+encodeURIComponent(PAYPAL_CLIENT_ID)+'&vault=true&intent=subscription';
+  sc.onload=draw;sc.onerror=()=>{ppLoaded=false};document.head.appendChild(sc);
 }
 
-/* Vidéo */
-async function genVideo(){
-  const p=document.getElementById('videoPrompt').value.trim();
-  if(!p)return;
-  if(plan===0&&used('video')>=LIMITS.video){alert(t('vlimit'));return}
-  const cfg=VIDEO_MODELS[parseInt(document.getElementById('videoModel').value,10)||0],model=cfg.id,ref=REF.video;
-  const out=document.getElementById('videoResult'),btn=document.getElementById('videoBtn');
-  out.textContent=t('thinking');btn.disabled=true;
+/* ===== Piblisite avan telechajman (plan gratis) ===== */
+let adTimer=null,adCb=null;
+function adDone(){const cb=adCb;adCancel();if(cb)cb()}
+function adCancel(){clearInterval(adTimer);adCb=null;$('adModal').classList.remove('open');$('adSlot').innerHTML=''}
+function withAd(cb){
+  if(plan>0||!AD_CODE.trim()){cb();return}
+  adCb=cb;const slot=$('adSlot');slot.innerHTML='';
+  try{slot.appendChild(document.createRange().createContextualFragment(AD_CODE))}catch(e){}
+  let n=AD_SECONDS;const w=$('adWait'),g=$('adGo');g.disabled=true;
+  w.textContent=t('ad_wait').replace('{n}',n);
+  $('adModal').classList.add('open');
+  clearInterval(adTimer);
+  adTimer=setInterval(()=>{n--;if(n>0){w.textContent=t('ad_wait').replace('{n}',n)}else{clearInterval(adTimer);w.textContent='';g.disabled=false}},1000);
+}
+
+function dlCur(){if(viewing)dlData(viewing.thumb,'minno-'+viewing.id+'.jpg')}
+function refFromView(){if(viewing){REF.photo=viewing.thumb;renderRef('photo');closeView();go('photo')}}
+function delCur(){if(!viewing)return;gallery=gallery.filter(x=>x.id!==viewing.id);LS.set('mn_gallery',gallery);closeView();renderLib()}
+
+/* ===== Foto ===== */
+async function genPhoto(){
+  const p=$('photoPrompt').value.trim();if(!p)return;
+  if(!allowed('photo')){alert(t('limit'));return}
+  const btn=$('photoBtn'),out=$('photoOut'),model=$('photoModel').value;
+  const card=document.createElement('div');card.className='res';card.innerHTML='<div class="spin">'+esc(t('working'))+'</div>';
+  out.prepend(card);btn.disabled=true;
   try{
-    let u;
-    if(cfg.url){
-      u=cfg.url.replace('{prompt}',encodeURIComponent(p)).replace('{duration}',SEL.videoD).replace('{resolution}',SEL.videoQ)
-        .replace('{image}',encodeURIComponent(ref)).replace('{key}',encodeURIComponent(cfg.key||''));
-    }else{
-      const q='?model='+model+'&duration='+SEL.videoD+'&resolution='+SEL.videoQ+'p&seed='+Math.floor(Math.random()*1e6)+(ref?'&image='+encodeURIComponent(ref):'');
-      u=POLLINATIONS_KEY
-        ?'https://gen.pollinations.ai/image/'+encodeURIComponent(p)+q+'&key='+encodeURIComponent(POLLINATIONS_KEY)
-        :'https://image.pollinations.ai/prompt/'+encodeURIComponent(p)+q+'&nologo=true';
-    }
-    const r=await fetch(u);
-    const type=r.headers.get('content-type')||'';
-    if(!r.ok||type.indexOf('video')!==0)throw new Error('novideo');
-    const blob=await r.blob();
-    const v=document.createElement('video');v.className='res';v.controls=true;v.autoplay=true;v.loop=true;v.playsInline=true;
-    v.src=URL.createObjectURL(blob);
-    out.innerHTML='';out.appendChild(v);bump('video');
-  }catch(e){out.textContent=t('video_err')}
+    const j=await api('/api/image',{model:model,prompt:p,ratio:SEL.photoR,quality:SEL.photoQ,reference:REF.photo||null,lang:SET.lang});
+    if(!j.image)throw new Error(t('err'));
+    card.innerHTML='';
+    const im=document.createElement('img');im.src=j.image;im.alt=p;card.appendChild(im);
+    const a=document.createElement('div');a.className='acts';
+    const d=document.createElement('button');d.textContent='⬇ '+t('download');d.onclick=()=>dlData(j.image,'minno-photo.png');
+    const u=document.createElement('button');u.textContent='🖼️ '+t('use_ref');u.onclick=()=>{REF.photo=j.image;shrink(j.image,1024,.85).then(x=>{REF.photo=x;renderRef('photo')})};
+    a.appendChild(d);a.appendChild(u);card.appendChild(a);
+    bump('photo');addGallery(j.image,p,model);
+  }catch(e){card.innerHTML='<div class="spin" style="color:#b3261e">⚠️ '+esc(errMsg(e))+'</div>'}
   btn.disabled=false;
 }
 
-/* Onglè: yon sèl zouti afiche a la fwa */
-function showTab(n){
-  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===n));
-  document.querySelectorAll('.tool').forEach(s=>s.classList.toggle('on',s.id===n));
+/* ===== Videyo ===== */
+async function genVideo(){
+  const p=$('videoPrompt').value.trim();if(!p)return;
+  if(!allowed('video')){alert(t('limit'));return}
+  const btn=$('videoBtn'),out=$('videoOut'),model=$('videoModel').value;
+  const card=document.createElement('div');card.className='res';card.innerHTML='<div class="spin">'+esc(t('working'))+'</div>';
+  out.prepend(card);btn.disabled=true;
+  try{
+    let j=await api('/api/video',{model:model,prompt:p,duration:+SEL.videoD,resolution:SEL.videoQ,reference:REF.video||null,lang:SET.lang});
+    let tries=0;
+    while(j.job&&!j.url&&tries<60){await new Promise(r=>setTimeout(r,5000));j=await api('/api/video?job='+encodeURIComponent(j.job));tries++}
+    if(!j.url)throw new Error(t('err'));
+    card.innerHTML='';
+    const v=document.createElement('video');v.src=j.url;v.controls=true;v.playsInline=true;v.autoplay=true;v.loop=true;card.appendChild(v);
+    const a=document.createElement('div');a.className='acts';
+    const d=document.createElement('button');d.textContent='⬇ '+t('download');d.onclick=()=>dlData(j.url,'minno-video.mp4');a.appendChild(d);card.appendChild(a);
+    bump('video');
+  }catch(e){card.innerHTML='<div class="spin" style="color:#b3261e">⚠️ '+esc(errMsg(e))+'</div>'}
+  btn.disabled=false;
 }
-function fromHash(){
-  const h=location.hash.slice(1);
-  if(['chat','photo','video','plans','faq'].indexOf(h)>-1)showTab(h);
-}
-window.addEventListener('hashchange',fromHash);
-fromHash();
 
-(function(){const s=document.getElementById('videoModel');VIDEO_MODELS.forEach((m,i)=>{const o=document.createElement('option');o.value=i;o.textContent=m.label;s.appendChild(o)})})();
-document.getElementById('videoModel').addEventListener('change',()=>{fixDur();renderSeg('videoD')});
-renderAllSeg();renderRef('photo');renderRef('video');applyLang();initGoogle();
+/* ===== Inisyalizasyon ===== */
+function fillSelect(id,list,val){const s=$(id);s.innerHTML='';list.forEach(m=>{const o=document.createElement('option');o.value=m[0];o.textContent=m[1];s.appendChild(o)});if(val)s.value=val}
+fillSelect('chatModel',MODELS_UI.chat,SET.chatModel);
+fillSelect('photoModel',MODELS_UI.photo);
+fillSelect('videoModel',MODELS_UI.video);
+$('chatModel').addEventListener('change',()=>{SET.chatModel=$('chatModel').value;saveSet()});
+$('videoModel').addEventListener('change',()=>{fixDur();renderSeg('videoD')});
+$('input').addEventListener('input',autosize);
+$('input').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey&&window.matchMedia&&matchMedia('(pointer:fine)').matches){e.preventDefault();send()}
+});
+if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener&&matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme);
+applyTheme();applyLang();initGoogle();go('chat');loadMe();
 </script>
 </body>
 </html>
