@@ -566,7 +566,7 @@ function errMsg(e){
   if(e.status===404)return t('nobackend');
   if(e.status===401){logout();return t('login_needed')}
   if(e.status===501)return t('unavailable');
-  if(e.status===429)return t('limit');
+  if(e.status===429&&e.message==='limit')return t('limit');
   if(e.status===403)return t('locked');
   return t('err')+' ['+(e.status||'net')+(e.message&&!/^HTTP/.test(e.message)?' '+e.message:'')+(e.detail?': '+e.detail:'')+']';
 }
@@ -655,13 +655,45 @@ async function send(){
 async function generate(c){
   setBusy(true);renderChat();
   ctrl=new AbortController();
+  let acc='',live=null,raf=0;
+  const paint=()=>{raf=0;if(!live)return;live.querySelector('.b').innerHTML=md(acc);const box=$('msgs');box.scrollTop=box.scrollHeight};
   try{
     const msgs=c.messages.filter(m=>!m.error).slice(-20).map(m=>({role:m.role,content:m.content}));
-    const j=await api('/api/chat',{model:c.model,messages:msgs,lang:SET.lang,instructions:SET.instr},ctrl.signal);
-    c.messages.push({role:'assistant',content:j.text||'…'});bump('chat');
+    const headers={'Content-Type':'application/json'};
+    if(token)headers.Authorization='Bearer '+token;
+    const r=await fetch('/api/chat',{method:'POST',headers,body:JSON.stringify({model:c.model,messages:msgs,lang:SET.lang,instructions:SET.instr,stream:true}),signal:ctrl.signal});
+    if(!r.ok){
+      const raw=await r.text();let j=null;try{j=JSON.parse(raw)}catch(x){}
+      let d='';
+      if(j&&j.detail){d=(j.detail.error&&(j.detail.error.message||j.detail.error))||j.detail.message||JSON.stringify(j.detail)}
+      else if(!j){d=raw.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim()}
+      const e=new Error((j&&j.error)||('HTTP '+r.status));e.status=r.status;e.detail=String(d).slice(0,300);throw e;
+    }
+    const startLive=()=>{
+      const box=$('msgs');
+      live=document.createElement('div');live.className='msg ai';live.innerHTML='<div class="b"></div>';
+      const last=box.lastElementChild;
+      if(last&&last.querySelector('.dots'))box.replaceChild(live,last);else box.appendChild(live);
+    };
+    if(r.body&&r.body.getReader){
+      const rd=r.body.getReader(),dec=new TextDecoder();
+      for(;;){
+        const {done,value}=await rd.read();if(done)break;
+        acc+=dec.decode(value,{stream:true});
+        if(!live&&acc)startLive();
+        if(!raf)raf=requestAnimationFrame(paint);
+      }
+      acc+=dec.decode();
+    }else{acc=await r.text()}
+    const k=acc.indexOf('\u0001ERR:');
+    if(k>=0){acc=acc.slice(0,k)+(k>0?'\n\n':'')+'⚠️ '+t('err');}
+    c.messages.push({role:'assistant',content:acc||'…',error:k>=0&&!acc.slice(0,k).trim()});bump('chat');
   }catch(e){
-    if(e.name!=='AbortError')c.messages.push({role:'assistant',content:'⚠️ '+errMsg(e),error:true});
+    if(e.name==='AbortError'){if(acc.trim())c.messages.push({role:'assistant',content:acc})}
+    else if(acc.trim()){c.messages.push({role:'assistant',content:acc+'\n\n⚠️ '+errMsg(e),error:false})}
+    else c.messages.push({role:'assistant',content:'⚠️ '+errMsg(e),error:true});
   }
+  if(raf)cancelAnimationFrame(raf);
   setBusy(false);ctrl=null;saveConvs();renderChat();
 }
 function stopGen(){if(ctrl)ctrl.abort()}
