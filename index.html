@@ -554,8 +554,12 @@ async function api(path,body,signal){
   const headers={'Content-Type':'application/json'};
   if(token)headers.Authorization='Bearer '+token;
   const r=await fetch(path,{method:body?'POST':'GET',headers,body:body?JSON.stringify(body):undefined,signal});
-  let j=null;try{j=await r.json()}catch(e){}
-  if(!r.ok){const e=new Error((j&&j.error)||('HTTP '+r.status));e.status=r.status;throw e}
+  const raw=await r.text();let j=null;try{j=JSON.parse(raw)}catch(e){}
+  if(!r.ok){
+    let d='';
+    if(j&&j.detail){d=(j.detail.error&&(j.detail.error.message||j.detail.error))||j.detail.message||JSON.stringify(j.detail)}
+    else if(!j){d=raw.replace(/<[^>]*>/g,' ').replace(/\s+/g,' ').trim()}
+    const e=new Error((j&&j.error)||('HTTP '+r.status));e.status=r.status;e.detail=String(d).slice(0,300);throw e}
   return j||{};
 }
 function errMsg(e){
@@ -564,7 +568,7 @@ function errMsg(e){
   if(e.status===501)return t('unavailable');
   if(e.status===429)return t('limit');
   if(e.status===403)return t('locked');
-  return (e.message&&e.message.length<220&&!/^HTTP/.test(e.message))?e.message:t('err');
+  return t('err')+' ['+(e.status||'net')+(e.message&&!/^HTTP/.test(e.message)?' '+e.message:'')+(e.detail?': '+e.detail:'')+']';
 }
 
 /* ===== Markdown senp ===== */
