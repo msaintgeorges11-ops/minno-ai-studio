@@ -56,7 +56,6 @@ module.exports = async (req, res) => {
     if (!idata) return send(res, 502, { error: 'noimage' });
     return ok({ image: 'data:' + (idata.mimeType || idata.mime_type || 'image/png') + ';base64,' + idata.data });
   } catch (e) {
-    return send(res, 500, { error: 'server' });
+    return send(res, 500, { error: 'server', detail: String((e && e.message) || e) });
   }
 };
-  

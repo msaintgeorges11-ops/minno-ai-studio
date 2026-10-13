@@ -8,4 +8,3 @@ module.exports = async (req, res) => {
   const usage = await getUsage(a.email);
   return send(res, 200, { enforced: true, plan, limits: LIMITS[plan], usage });
 };
-      
