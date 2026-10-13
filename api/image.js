@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
         body: JSON.stringify({ model: MODELS.imageGrok, prompt, n: 1, response_format: 'b64_json' })
       });
       const d = await r.json();
-      if (r.status === 429) return send(res, 429, { error: 'rate' });
+      if (r.status === 429) return send(res, 429, { error: 'rate', detail: d });
       if (!r.ok) return send(res, 502, { error: 'upstream', detail: d });
       const img = d.data && d.data[0] && d.data[0].b64_json;
       if (!img) return send(res, 502, { error: 'noimage' });
@@ -48,7 +48,7 @@ module.exports = async (req, res) => {
     let r = await call(true);
     if (r.status === 400) r = await call(false);
     const d = await r.json();
-    if (r.status === 429) return send(res, 429, { error: 'rate' });
+    if (r.status === 429) return send(res, 429, { error: 'rate', detail: d });
     if (!r.ok) return send(res, 502, { error: 'upstream', detail: d });
     const ps = (d.candidates && d.candidates[0] && d.candidates[0].content && d.candidates[0].content.parts) || [];
     const ip = ps.find(p => p.inlineData || p.inline_data);
