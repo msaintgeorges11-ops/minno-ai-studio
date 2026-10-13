@@ -1,8 +1,8 @@
 // Fonksyon pataje: modèl yo, otantifikasyon Google, plan + limit chak jou (Redis), PayPal
 const MODELS = {
-  chatGemini: process.env.GEMINI_CHAT_MODEL || 'gemini-2.5-flash',
+  chatGemini: process.env.GEMINI_CHAT_MODEL || 'gemini-3.8-flash',
   chatGrok: process.env.GROK_CHAT_MODEL || 'grok-4',
-  imageNano: process.env.NANO_BANANA_MODEL || 'gemini-2.5-flash-image',
+  imageNano: process.env.NANO_BANANA_MODEL || 'gemini-3.1-flash-image',
   imageGrok: process.env.GROK_IMAGE_MODEL || 'grok-2-image'
 };
 
